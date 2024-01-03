@@ -1,0 +1,27 @@
+{
+  "projects": [
+    {
+      "title": "Tokachi Musubi",
+      "type": "types.DOCUMENT",
+      "category": ["Web App"],
+      "description": "I recently launched a website for a friend's food truck, beautifully crafted to display seamlessly across devices such as iPhones, iPads, and Macs. Key features include: An adaptive design for optimal viewing on various screen sizes, menus and a schedule showcasing the food truck's culinary adventures, detailed insights into our special Tokachi and Musubi offerings, and a user-friendly interface for menu management that empowers the owner to make updates without any coding (only visible to the owner).",
+      "client": "Tokachi Musubi",
+      "technologies": ["React, JavaScript, HTML, CSS, Firebase"],
+      "industry": "Food",
+      "date": "April, 2023",
+      "urls": [
+        {
+          "name": "GitHub link",
+          "link": "https://github.com/gomyway1216/food-truck-production"
+        }
+      ],
+      "images": [
+        "https://firebasestorage.googleapis.com/v0/b/yudai-portfolio.appspot.com/o/project%2Ftokachi%2Ftokachi_2.png?alt=media&token=f8c6e7b6-b53a-4b32-bbcc-1f8089707533",
+        "https://firebasestorage.googleapis.com/v0/b/yudai-portfolio.appspot.com/o/project%2Ftokachi%2Ftokachi_3.png?alt=media&token=6bf71815-ecc0-4026-a8f0-2a1b8dadb5c2",
+        "https://firebasestorage.googleapis.com/v0/b/yudai-portfolio.appspot.com/o/project%2Ftokachi%2Ftokachi_4.png?alt=media&token=abcf3139-1140-4210-8c3b-be855028e2b3",
+        "https://firebasestorage.googleapis.com/v0/b/yudai-portfolio.appspot.com/o/project%2Ftokachi%2Ftokachi_5.png?alt=media&token=5726dc3e-1a12-4776-9c01-9de2418966ae"
+      ],
+      "thumbImage": "https://firebasestorage.googleapis.com/v0/b/yudai-portfolio.appspot.com/o/project%2Ftokachi%2Ftokachi_1.png?alt=media&token=021db64e-73f9-4229-966a-58057ab4800d"
+    }
+  ]
+}
