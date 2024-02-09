@@ -71,7 +71,7 @@ const Resume = () => {
       <section id="resume" className="section">
         <div className="container">
           <div className="title">
-            <h3>Experience.</h3>
+            <h3>Experience</h3>
           </div>
           {/* End title */}
           <div className="resume-box">
@@ -114,7 +114,7 @@ const Resume = () => {
           {/* End separated */}
 
           <div className="title">
-            <h3>Education & Skills!!</h3>{' '}
+            <h3>Education & Skills</h3>{' '}
           </div>
 
           <div className="row">

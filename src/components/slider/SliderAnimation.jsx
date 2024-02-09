@@ -2,8 +2,7 @@ import React from 'react';
 import TextLoop from 'react-text-loop';
 
 const conctInfo = {
-  phone: '+04 6545-9535-6515',
-  email: ' nairobi-designer@domain.com',
+  email: 'uwyudai@gmail.com',
 };
 
 const sliderContent = {
@@ -24,12 +23,11 @@ const Slider = () => {
       <section id="home" className="home-banner">
         <div className="hb-top-fixed d-flex">
           <div className="hb-info">
-            <a href="tel:+04 6545-9535-6515">{conctInfo.phone}</a>
-            <a href="mailto:mail%20to:ibthemes21@gmail.com,com">
+            <a href="mailto:mail%20to:uwyudai@gmail.com">
               {conctInfo.email}
             </a>
           </div>
-          <div className="hb-lang">
+          {/* <div className="hb-lang">
             <ul className="nav">
               <li className="active">
                 <a href="#">EN</a>
@@ -38,7 +36,7 @@ const Slider = () => {
                 <a href="#">FR</a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
         {/* End hp-top-fixed */}
 

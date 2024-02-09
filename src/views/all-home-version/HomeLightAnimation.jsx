@@ -40,17 +40,17 @@ const HomeOne = () => {
       </section>
       {/* End Portfolio Section */}
 
-      <section id="blog" className="section">
+      {/* <section id="blog" className="section">
         <div className="container">
           <div className="title">
             <h3>Latest Blog.</h3>
           </div>
           <Blog />
         </div>
-      </section>
+      </section> */}
       {/* End Portfolio Section */}
 
-      <section id="contactus" className="section theme-light dark-bg">
+      {/* <section id="contactus" className="section theme-light dark-bg">
         <div className="container">
           <div className="row">
             <div
@@ -60,7 +60,6 @@ const HomeOne = () => {
             >
               <ContactInfo />
             </div>
-            {/* End Contact info */}
 
             <div
               className="col-lg-7 ml-auto m-15px-tb"
@@ -73,7 +72,6 @@ const HomeOne = () => {
                 <Contact />
               </div>
             </div>
-            {/* End contact form */}
 
             <div
               className="col-12"
@@ -82,12 +80,10 @@ const HomeOne = () => {
               data-aos-delay="300"
             >
               <Map />
-              {/* End google-map */}
             </div>
-            {/* End Col */}
           </div>
         </div>
-      </section>
+      </section> */}
       {/* End Contact Section */}
 
       <footer className="footer white">

@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import Contact from '../contact/Contact';
 
-Modal.setAppElement('#root');
+// Modal.setAppElement('#root');
 
 const News = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
   const [isOpen4, setIsOpen4] = useState(false);
+
+  // Set app element for accessibility once component has mounted
+  // useEffect(() => {
+  //   Modal.setAppElement('#root');
+  // }, []);
+
 
   function toggleModalOne() {
     setIsOpen(!isOpen);

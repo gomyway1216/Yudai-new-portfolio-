@@ -7,53 +7,53 @@ import 'react-tabs/style/react-tabs.css';
 const skillContent = [
   {
     name: 'Java',
-    numberPercent: '92',
+    numberPercent: '90',
     startCount: '0',
     category: 'Backend',
-    endCount: '92',
+    endCount: '90',
   },
   {
     name: 'React JS',
-    numberPercent: '85',
+    numberPercent: '80',
     category: 'Frontend',
     startCount: '0',
     endCount: '85',
   },
   {
-    name: 'Vue Js',
-    numberPercent: '90',
-    startCount: '0',
-    category: 'Frontend',
-    endCount: '90',
-  },
-  {
-    name: 'Ui/Ux',
-    numberPercent: '88',
-    startCount: '0',
-    category: 'Frontend',
-    endCount: '88',
-  },
-  {
     name: 'Javascript',
-    numberPercent: '88',
+    numberPercent: '50',
     startCount: '0',
     category: 'Frontend',
-    endCount: '88',
+    endCount: '50',
   },
   {
     name: 'Typescript',
-    numberPercent: '88',
+    numberPercent: '40',
     startCount: '0',
     category: 'Backend',
-    endCount: '88',
+    endCount: '40',
   },
   {
     name: 'Flutter',
-    numberPercent: '88',
+    numberPercent: '20',
     startCount: '0',
     category: 'Frontend',
-    endCount: '88',
+    endCount: '20',
   },
+  {
+    name: 'Python',
+    numberPercent: '10',
+    startCount: '0',
+    category: 'Backend',
+    endCount: '10',
+  },
+  {
+    name: 'Vue Js',
+    numberPercent: '10',
+    startCount: '0',
+    category: 'Frontend',
+    endCount: '10',
+  }
 ];
 
 const tabList = ['All', 'Frontend', 'Backend'];

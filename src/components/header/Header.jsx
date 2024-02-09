@@ -33,7 +33,7 @@ const Header = () => {
         <div className="scroll-bar">
           <div className="hl-top">
             <div className="hl-logo">
-              <Link to="/">N</Link>
+              <Link to="/">Y</Link>
             </div>
           </div>
           {/* End htl-top */}
