@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,8 +18,54 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// // Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
 
-export { app, analytics };
+// export { app, analytics };
+
+
+let firebaseApp;
+let db;
+let auth;
+
+export const init = () => {
+  const firebaseApp = initializeApp(firebaseConfig);
+  if(!db) {
+    db = getFirestore(firebaseApp);
+  }
+  if(!auth) {
+    auth = getAuth(firebaseApp);
+  }
+};
+init();
+
+export const exportDbAccess = () => {
+  return db;
+};
+
+export const exportStorageAccess = () => {
+  return getStorage(firebaseApp);
+};
+
+export { auth };
+
+export const signInWithEmail = (email, password) => {
+  return signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      return user;
+    }).catch((error) => {
+      console.log('errorCode: ', error.code);
+      console.log('errorMessage: ', error.message);
+      throw new Error('Sign in failed!');
+    });
+};
+
+export const signOutUser = () => {
+  signOut(auth).then(() => {
+    console.log('sign out successful!');
+  }).catch((error) => {
+    console.log('sign out has some error', error);
+  });
+};

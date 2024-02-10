@@ -3,6 +3,7 @@ import AllRoutes from './router/AllRoutes';
 import ScrollToTop from './components/ScrollToTop';
 import AnimatedCursor from 'react-animated-cursor';
 import AOS from 'aos';
+import { AuthProvider } from './provider/AuthProvider';
 import 'aos/dist/aos.css';
 
 const App = () => {
@@ -20,7 +21,9 @@ const App = () => {
         outerScale={1.4}
       />
       <ScrollToTop />
-      <AllRoutes />
+      <AuthProvider>
+        <AllRoutes />
+      </AuthProvider>
     </>
   );
 };
