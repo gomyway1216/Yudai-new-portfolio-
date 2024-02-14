@@ -20,7 +20,6 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
   const closeModal = () => {
     console.log('closeModal called');
     setIsOpen(false);
-    setModalIsOpen(false);
   };
 
   console.log('isOpen in modal: ', isOpen, project);

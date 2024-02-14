@@ -4,6 +4,7 @@ import ScrollToTop from './components/ScrollToTop';
 import AnimatedCursor from 'react-animated-cursor';
 import AOS from 'aos';
 import { AuthProvider } from './provider/AuthProvider';
+import { PostsProvider } from './provider/PostsProvider';
 import 'aos/dist/aos.css';
 
 const App = () => {
@@ -22,7 +23,9 @@ const App = () => {
       />
       <ScrollToTop />
       <AuthProvider>
-        <AllRoutes />
+        <PostsProvider>
+          <AllRoutes />
+        </PostsProvider>
       </AuthProvider>
     </>
   );
