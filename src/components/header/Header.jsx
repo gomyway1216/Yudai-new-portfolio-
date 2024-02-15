@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Scrollspy from 'react-scrollspy';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 import {
   FiUser,
@@ -8,11 +8,34 @@ import {
   FiFileText,
   FiPhoneOutgoing,
 } from 'react-icons/fi';
+import { MdAccountCircle } from 'react-icons/md';
 import { FaHome, FaBlog } from 'react-icons/fa';
+import { MenuItem, Menu } from '@mui/material/';
+import { useAuth } from '../../provider/AuthProvider';
 
 const Header = () => {
   const [click, setClick] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = () => setClick(!click);
+  const toggleDropdown = () => setShowDropdown(!showDropdown);
+  const navigate = useNavigate();
+  const { currentUser, signOut } = useAuth();
+
+  console.log('showDropdown', showDropdown);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    setAnchorEl(null);
+  };
 
   return (
     <>
@@ -40,7 +63,7 @@ const Header = () => {
 
           <Scrollspy
             className="nav nav-menu"
-            items={['home', 'about', 'resume', 'work', 'blog', 'contactus']}
+            items={['home', 'about', 'resume', 'work', 'blog', 'contactus', 'admin']}
             currentClassName="active"
             offset={-30}
           >
@@ -50,7 +73,7 @@ const Header = () => {
                 href="#home"
                 data-tip
                 data-for="HOME"
-                onClick={handleClick}
+                onClick={handleMenu}
               >
                 <FaHome />
                 <ReactTooltip
@@ -158,6 +181,43 @@ const Header = () => {
                 </ReactTooltip>
               </a>
             </li>
+            {currentUser && <li>
+              <a
+                className="nav-link"
+                data-tip
+                data-for="ADMIN"
+                onClick={handleMenu}
+              >
+                <MdAccountCircle />
+                <ReactTooltip
+                  id="ADMIN"
+                  place="right"
+                  type="dark"
+                  effect="float"
+                >
+                  <span>Admin</span>
+                </ReactTooltip>
+              </a>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={() => navigate('/admin')}>Admin Page</MenuItem>
+                <MenuItem onClick={handleSignOut}>Log out</MenuItem>
+              </Menu>
+            </li>
+            }
           </Scrollspy>
         </div>
       </header>
