@@ -16,7 +16,7 @@ const HomeOne = () => {
   const navigate = useNavigate();
 
   useDocumentTitle(
-    'Nairo || Theme Light Animation React Personal Portfolio Template'
+    'Yudai Portfolio'
   );
   document.body.classList.add('theme-light');
   return (
