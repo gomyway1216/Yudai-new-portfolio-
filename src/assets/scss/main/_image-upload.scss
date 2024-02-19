@@ -1,14 +1,19 @@
 .imageListContainer {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; // Prevent wrapping to a new line
+  overflow-x: auto; // Enable horizontal scrolling
   gap: 10px; // Adjust the space between images
+  padding: 10px 0; // Add some padding at the top and bottom (optional)
 
   .imageListItem {
     position: relative;
-    display: inline-block; // This makes sure that the container fits the content
-    margin: 10px; // Optional: if you want some spacing around each item
-    // If your images are of different sizes and you want the containers to have the same size, 
-    // you might need to set a fixed width and height here.
+    flex-shrink: 0; // Prevent the item from shrinking
+    width: 200px; // Set a fixed width, adjust as necessary
+    margin-right: 10px; // Keep space between items
+
+    &:last-child {
+      margin-right: 0; // Remove margin for the last item
+    }
   
     .deleteButton {
       position: absolute;

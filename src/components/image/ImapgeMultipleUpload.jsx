@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Button, LinearProgress, IconButton } from '@mui/material';
-// import DeleteIcon from '@mui/icons-material/Delete'; 
 import ClearIcon from '@mui/icons-material/Clear';// Import the delete icon
 import * as api from '../../api/firebase/image';
-// import styles from './image-multiple-upload.module.scss';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const ImageMultipleUpload = (props) => {
   const [selectedImages, setSelectedImages] = useState([]); // Array to hold multiple images
   const [imageUrls, setImageUrls] = useState(props.originalImageUrls || []); // Array of URLs
   const [loading, setLoading] = useState(false);
+
+  const handleOnDragEnd = (result) => {
+    if (!result.destination) return;
+    const items = Array.from(imageUrls);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setImageUrls(items);
+    props.handleImageUrls(items); // Update the parent component
+  };
 
   useEffect(() => {
     if (props.originalImageUrls) {
@@ -37,9 +46,6 @@ const ImageMultipleUpload = (props) => {
         onFileChange(imageFile);
       }
     });
-    // Clear the selected images after they are processed
-    // not sure if this line is necessary
-    // setSelectedImages([]);
   }, [selectedImages]);
 
   const handleImageRemove = (index) => {
@@ -56,13 +62,8 @@ const ImageMultipleUpload = (props) => {
           accept="image/*"
           multiple // Allow multiple file selections
           type="file"
-          id="select-image"
+          id="select-multiple-image"
           style={{ display: 'none' }}
-          // onChange={(e) => {
-          //   if (e.target.files) {
-          //     setSelectedImages([...e.target.files]);
-          //   }
-          // }}
           onChange={(e) => {
             if (e.target.files) {
               const filesArray = Array.from(e.target.files);
@@ -75,7 +76,7 @@ const ImageMultipleUpload = (props) => {
             }
           }}
         />
-        <label htmlFor="select-image">
+        <label htmlFor="select-multiple-image">
           <Button variant="contained" color="primary" component="span">
             Upload Images
           </Button>
@@ -84,16 +85,39 @@ const ImageMultipleUpload = (props) => {
       <Box sx={{ width: '100%' }}>
         {loading && <LinearProgress />}
       </Box>
-      <Box mt={2} className="imageListContainer">
-        {imageUrls.map((url, index) => (
-          <div key={index} className="imageListItem">
-            <img src={url} alt={`Image ${index}`} className="imagePreview" />
-            <IconButton onClick={() => handleImageRemove(index)} className="deleteButton">
-              <ClearIcon />
-            </IconButton>
-          </div>
-        ))}
-      </Box>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
+        <Droppable droppableId="imageList" direction="horizontal">
+          {(provided) => (
+            <Box 
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              mt={2}
+              className="imageListContainer"
+            >
+              {imageUrls.map((url, index) => (
+                <Draggable key={url} draggableId={url} index={index}>
+                  {(provided) => (
+                    <div 
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                      key={index}
+                      className="imageListItem"
+                    >
+                      <img src={url} alt={`Image ${index}`} className="imagePreview" />
+                      <IconButton onClick={() => handleImageRemove(index)} className="deleteButton">
+                        <ClearIcon />
+                      </IconButton>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </Box>
+          )}
+        </Droppable>
+      </DragDropContext>   
+
     </>
   );
 };

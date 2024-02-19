@@ -5,7 +5,6 @@ import ClearIcon from '@mui/icons-material/Clear'; // Import the clear icon
 import * as api from '../../api/firebase/image';
 
 const ImageUpload = (props) => {
-  const [selectedImage, setSelectedImage] = useState(null); // State to hold the selected image
   const [imageUrl, setImageUrl] = useState(props.originalImageUrl || ''); // State for the image URL
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +45,7 @@ const ImageUpload = (props) => {
           onChange={(e) => {
             if (e.target.files && e.target.files[0]) {
               const file = e.target.files[0];
-              setSelectedImage(file);
+              // setSelectedImage(file);
               onFileChange(file);
               e.target.value = null; // Clear the file input
             }
@@ -62,7 +61,11 @@ const ImageUpload = (props) => {
         {loading && <LinearProgress />}
       </Box>
       {imageUrl && (
-        <Box mt={2} className="imagePreviewContainer">
+        <Box 
+          mt={2} 
+          sx={{ width: '40%' }} 
+          className="imagePreviewContainer"
+        >
           <img src={imageUrl} alt="Uploaded" className="imagePreview" />
           <IconButton onClick={handleImageRemove} className="deleteButton">
             <ClearIcon />
