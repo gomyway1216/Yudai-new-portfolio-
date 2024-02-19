@@ -59,7 +59,7 @@ export const deletePostByCategory = async (id, category) => {
     await deleteDoc(doc(getDbAccess(), `post/${category}/posts`, id));
     return true;
   } catch (err) {
-    console.error('updating post public status is failing.');
+    console.error('deleting post error: ', err);
     return false;
   }
 };

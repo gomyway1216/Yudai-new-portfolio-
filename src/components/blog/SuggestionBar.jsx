@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const DEFAULT_OPTIONS = [
-  { id: 0, title: 'All', url: '/all' },
-  { id: 1, title: 'Technology', url: '/technology' },
-  { id: 2, title: 'Life', url: '/life' }
+  { id: 0, title: 'All', url: '/blog/all' },
+  { id: 1, title: 'Technology', url: '/blog/technology' },
+  { id: 2, title: 'Life', url: '/blog/life' }
 ];
 
 const SuggestionBar = ({ activeTab, setActiveTab }) => {
-  // console.log('activeTab', activeTab);
   const [options, setOptions] = useState(DEFAULT_OPTIONS);
 
   useEffect(() => {

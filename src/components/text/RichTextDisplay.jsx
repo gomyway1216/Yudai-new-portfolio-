@@ -14,9 +14,6 @@ const RichTextDisplay = ({ post }) => {
     ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling']
   });
 
-  // console.log('body: ', body)
-  // console.log('purifiedBody: ', purifiedBody)
-
   return (
     <div className={styles.root}>
       <div className={styles.title}>{title}</div>

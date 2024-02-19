@@ -1,32 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button, LinearProgress, TextField } from '@mui/material';
+import { Box, Button, LinearProgress, IconButton } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear'; // Import the clear icon
 import * as api from '../../api/firebase/image';
-import styles from './image-upload.module.scss';
 
 const ImageUpload = (props) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(props.originalImageUrl);
+  const [selectedImage, setSelectedImage] = useState(null); // State to hold the selected image
+  const [imageUrl, setImageUrl] = useState(props.originalImageUrl || ''); // State for the image URL
   const [loading, setLoading] = useState(false);
 
-  const onFileChange = async () => {
-    if (!selectedImage) return;
+  useEffect(() => {
+    // If there's an originalImageUrl prop, use it to set the imageUrl state
+    if (props.originalImageUrl) {
+      setImageUrl(props.originalImageUrl);
+    }
+  }, [props.originalImageUrl]);
+
+  const onFileChange = async (imageFile) => {
     setLoading(true);
-    const downloadURL = await api.getMenuImageRef(selectedImage);
-    setImageUrl(downloadURL);
-    props.handleImageUrl(downloadURL);
+    try {
+      const downloadURL = await api.getImageRef(imageFile, props.type, props.id);
+      setImageUrl(downloadURL); // Set the single image URL
+      props.handleImageUrl(downloadURL); // Propagate the change up to the parent component
+    } catch (error) {
+      console.error('Error uploading image: ', error);
+      // Optionally handle upload error here
+    }
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (selectedImage) {
-      onFileChange();
-    }
-  }, [selectedImage]);
+  const handleImageRemove = () => {
+    // Clear the image URL and notify the parent component
+    setImageUrl('');
+    props.handleImageUrl('');
+  };
 
   return (
     <>
-      <div className={styles.uploadButton}>
+      <div className="uploadButton">
         <input
           accept="image/*"
           type="file"
@@ -34,7 +45,10 @@ const ImageUpload = (props) => {
           style={{ display: 'none' }}
           onChange={(e) => {
             if (e.target.files && e.target.files[0]) {
-              setSelectedImage(e.target.files[0]);
+              const file = e.target.files[0];
+              setSelectedImage(file);
+              onFileChange(file);
+              e.target.value = null; // Clear the file input
             }
           }}
         />
@@ -43,24 +57,16 @@ const ImageUpload = (props) => {
             Upload Image
           </Button>
         </label>
-        <div className={styles.fileName}>
-          <TextField
-            disabled
-            size="small"
-            style={{ display: imageUrl ? 'inline' : 'none' }}
-            variant="standard"
-            value={selectedImage ? selectedImage.name : (imageUrl ? imageUrl : '')}
-          />
-        </div>
       </div>
       <Box sx={{ width: '100%' }}>
         {loading && <LinearProgress />}
       </Box>
       {imageUrl && (
-        <Box mt={2} textAlign="center">
-          <div>Image Preview:</div>
-          <img src={imageUrl} alt={selectedImage ? 
-            selectedImage.name : imageUrl} className={styles.imagePreview} />
+        <Box mt={2} className="imagePreviewContainer">
+          <img src={imageUrl} alt="Uploaded" className="imagePreview" />
+          <IconButton onClick={handleImageRemove} className="deleteButton">
+            <ClearIcon />
+          </IconButton>
         </Box>
       )}
     </>
@@ -68,8 +74,10 @@ const ImageUpload = (props) => {
 };
 
 ImageUpload.propTypes = {
-  handleImageUrl: PropTypes.func.isRequired,
-  originalImageUrl: PropTypes.string
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  handleImageUrl: PropTypes.func.isRequired, // This should now expect a single URL
+  originalImageUrl: PropTypes.string // This should be a string (URL)
 };
 
 export default ImageUpload;

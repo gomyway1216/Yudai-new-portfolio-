@@ -1,16 +1,11 @@
 import React, { useEffect, useState, useRef, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, FormGroup, FormControlLabel, TextField, Switch } from '@mui/material';
+import { Button, FormGroup, FormControlLabel, TextField, Switch,
+  FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import DeleteItemDialog from '../dialog/DeleteItemDialog';
 import InstantMessage from '../popUp/Alert';
-import 'react-quill/dist/quill.snow.css';
 import styles from './rich-text-editor.module.scss';
 import { getPostCategories } from '../../api/firebase/post';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 import ImageUpload from '../image/ImageUpload';
 import { RichTextEditor } from '@mantine/rte';
 import * as imageApi from '../../api/firebase/image';
@@ -40,14 +35,12 @@ const PostEditor = (props) => {
   const [imageUrl, setImageUrl] = useState('');
   const [language, setLanguage] = useState({'id': 'en', 'name': 'English'});
 
-  console.log('categoryList', categoryList);
-
   const titleRef = useRef(title);
   const bodyRef = useRef(body);
   const isPublicRef = useRef(isPublic);
   const categoryRef = useRef(category);
 
-  // const [status, setStatus] = useState<'idle' | 'updating' | 'deleting'>('idle');
+  // useState<'idle' | 'updating' | 'deleting'>('idle');
   const [status, setStatus] = useState('idle');
 
   useEffect(() => {
@@ -197,7 +190,7 @@ const PostEditor = (props) => {
 
     try {
       await handleFunction(item);
-      navigate(`/${category}/${props.postId || item.id}`);
+      navigate(`/blog/${category}/${props.postId || item.id}`);
     } catch (err) {
       if (err instanceof Error) {
         setErrorMessage(err.message);
@@ -214,9 +207,9 @@ const PostEditor = (props) => {
     try {
       await props.updatePost(original);
       if (props.postId) {
-        navigate(`/${category}/${props.postId}`);
+        navigate(`/blog/${category}/${props.postId}`);
       } else {
-        navigate('/post');
+        navigate('/blog/all');
       }
     } catch (err) {
       if (err instanceof Error) {
@@ -232,7 +225,7 @@ const PostEditor = (props) => {
     setStatus('deleting');
     const updateStatus = await props.deletePost(props.postId, props.category);
     if (updateStatus) {
-      navigate(`/${props.category}/${props.postId}`);
+      navigate(`/blog/${props.category}/${props.postId}`);
     } else {
       const msg = 'deletion of the post is failing!';
       setErrorMessage(msg);
@@ -325,8 +318,17 @@ const PostEditor = (props) => {
           </FormGroup>
         </div>
       </div>
-      <ImageUpload handleImageUrl={handleImageUrl} originalImageUrl={imageUrl} />
-      <RichTextEditor value={body} onChange={setBody} onImageUpload={imageApi.getMenuImageRef} />
+      <ImageUpload
+        id={props.postId} 
+        type="blog" 
+        handleImageUrl={handleImageUrl} 
+        originalImageUrl={imageUrl} 
+      />
+      <RichTextEditor 
+        value={body} 
+        onChange={setBody} 
+        onImageUpload={imageApi.getMenuImageRef} 
+      />
       <div className={styles.buttons}>
         <Button
           variant="outlined"

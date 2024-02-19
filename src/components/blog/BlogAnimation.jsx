@@ -43,9 +43,6 @@ const News = () => {
     setBody(purifiedBody);
   };
 
-  // console.log('posts: ', posts);
-  console.log('body: ', body);
-
   return (
     <>
       <div className="row">

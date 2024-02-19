@@ -8,6 +8,7 @@
     "@mantine/core": "^5.10.5",
     "@mantine/hooks": "^5.10.5",
     "@mantine/rte": "^5.10.5",
+    "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.15.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

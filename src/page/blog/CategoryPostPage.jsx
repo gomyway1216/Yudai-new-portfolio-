@@ -73,7 +73,7 @@ const CategoryPostPage = () => {
 
   const handleClickPost = (id, postCategory) => {
     setScrollPosition(window.scrollY); // Store scroll position when navigating away
-    navigate(`/${postCategory}/${id}`);
+    navigate(`/blog/${postCategory}/${id}`);
   };
 
   // When the component mounts or when category changes:

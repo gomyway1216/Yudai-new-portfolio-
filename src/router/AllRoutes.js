@@ -9,6 +9,7 @@ import AdminPage from '../page/admin/AdminPage';
 import EditPostPage from '../page/editPost/EditPostPage';
 import CategoryPostPage from '../page/blog/CategoryPostPage';
 import PostPage from '../page/blog/PostPage';
+import EditProjectPage from '../page/editProject/EditProjectPage';
 
 const AllRoutes = () => {
   return (
@@ -20,13 +21,19 @@ const AllRoutes = () => {
         <Route exact path='/admin' element={<PrivateRoute/>}>
           <Route exact path='/admin' element={<AdminPage/>}/>
         </Route>
-        <Route path='/:category' element={<CategoryPostPage />} />
-        <Route path='/:category/:id' element={<PostPage />} />
-        <Route path='/:category/:id/edit' element={<PrivateRoute />}>
-          <Route path='/:category/:id/edit' element={<EditPostPage />} />
+        <Route path='/blog/:category' element={<CategoryPostPage />} />
+        <Route path='/blog/:category/:id' element={<PostPage />} />
+        <Route path='/blog/:category/:id/edit' element={<PrivateRoute />}>
+          <Route path='/blog/:category/:id/edit' element={<EditPostPage />} />
         </Route>
         <Route path='/new-post' element={<PrivateRoute />}>
           <Route path='/new-post' element={<EditPostPage />} />
+        </Route>
+        <Route path='/project/:id/edit' element={<PrivateRoute />}>
+          <Route path='/project/:id/edit' element={<EditProjectPage />} />
+        </Route>
+        <Route path='/new-project' element={<PrivateRoute />}>
+          <Route path='/new-project' element={<EditProjectPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

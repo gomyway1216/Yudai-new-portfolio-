@@ -1,17 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import PropTypes from 'prop-types'; // Import PropTypes
 
-// interface PostsContextProps {
-//   postsByCategory: { [category: string]: Array<Post> };
-//   setPostsByCategory: (category: string, posts: Array<Post>) => void;
-//   currentPageByCategory: { [category: string]: number };
-//   setCurrentPageByCategory: (category: string, pageNum: number) => void;
-//   scrollPosition: number;
-//   setScrollPosition: (position: number) => void;
-//   lastVisibleDocTimestamps: { [key: string]: number };
-//   setLastVisibleDocTimestamps: React.Dispatch<React.SetStateAction<{ [key: string]: number }>>;
-// }
-
 const defaultValues = {
   postsByCategory: {},
   setPostsByCategory: () => { },
@@ -28,10 +17,6 @@ const PostsContext = createContext(defaultValues);
 export const usePosts = () => {
   return useContext(PostsContext);
 };
-
-// type PostsProviderProps = {
-//   children: React.ReactNode;
-// };
 
 export const PostsProvider = ({ children }) => {
   const [postsByCategory, setInternalPostsByCategory] = useState({});

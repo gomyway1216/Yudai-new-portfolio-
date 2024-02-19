@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import * as api from '../../api/firebase/post';
 import { useParams } from 'react-router-dom';
-import PostEditor from '../../components/edit/PostEditor';
+import PostEditor from '../../components/editPost/PostEditor';
 
 const EditPostPage = () => {
   const { category, id } = useParams();

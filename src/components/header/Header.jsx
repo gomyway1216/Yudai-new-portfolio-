@@ -22,8 +22,6 @@ const Header = () => {
   const navigate = useNavigate();
   const { currentUser, signOut } = useAuth();
 
-  console.log('showDropdown', showDropdown);
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };

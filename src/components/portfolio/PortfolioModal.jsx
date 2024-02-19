@@ -4,11 +4,16 @@ import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import Contact from '../contact/Contact';
 import Slider from 'react-slick';
+import { useAuth } from '../../provider/AuthProvider';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // Modal.setAppElement('#root');
 
 const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
-
+  const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  
   const sliderRef = useRef();
 
   const types = {
@@ -18,15 +23,8 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
   };
 
   const closeModal = () => {
-    console.log('closeModal called');
     setIsOpen(false);
   };
-
-  console.log('isOpen in modal: ', isOpen, project);
-
-  // if(project === null) {
-  //   return null;
-  // }
 
   const SlickArrowLeft = ({ currentSlide, slideCount, ...props }) => (
     <button
@@ -99,6 +97,9 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
     }
   }, [project]);
   
+  const handleEdit = () => {
+    navigate(`/project/${project.id}/edit`);
+  };
 
   return (
     <Modal
@@ -110,6 +111,7 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
       closeTimeoutMS={500}
     >
       <div>
+        {currentUser && <Button onClick={handleEdit}>EDIT</Button>}
         <button className="close-modal" onClick={closeModal}>
           <img src="/img/cancel.svg" alt="close icon" />
         </button>
@@ -235,8 +237,9 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
 
 PortfolioModal.propTypes = {
   project: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    category: PropTypes.arrayOf(PropTypes.string).isRequired,
+    categories: PropTypes.arrayOf(PropTypes.string).isRequired,
     description: PropTypes.string.isRequired,
     client: PropTypes.string.isRequired,
     technologies: PropTypes.arrayOf(PropTypes.string).isRequired,

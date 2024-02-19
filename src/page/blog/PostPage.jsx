@@ -21,7 +21,7 @@ const PostPage = () => {
   }, []);
 
   const handleEdit = () => {
-    navigate(`/${category}/${id}/edit`);
+    navigate(`/blog/${category}/${id}/edit`);
   };
 
 

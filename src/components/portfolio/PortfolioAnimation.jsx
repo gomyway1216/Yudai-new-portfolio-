@@ -35,29 +35,16 @@ const PortfolioAnimation = () => {
     = useState({'All': [], 'Web App': [], 'Mobile': [], 'AI/ML': []});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-
-
   const [isOpen, setIsOpen] = useState(false);
-
-  function toggleModalOne() {
-    console.log('toggleModalOne called', isOpen);
-    setIsOpen(!isOpen);
-  }
 
   useEffect(() => {
     classifyProjects();
   }, []);
 
   const handleProjectClick = (project) => {
-    console.log('handleProjectClick called');
     setSelectedProject(project);
     setIsModalOpen(true);
   };
-
-  // addProjectsToFirestore(content.projects)
-  //   .then(() => console.log('Projects added successfully!'))
-  //   .catch((error) => console.error('Error adding projects:', error));
-  
 
   const classifyProjects = async () => {
     const classified = {All: [], 'Web App': [], Mobile: [], 'AI/ML': []};
@@ -68,7 +55,7 @@ const PortfolioAnimation = () => {
       // Add to 'All' category
       classified['All'].push(project);
       // Add to other categories based on the project's category
-      project.category.forEach(cat => {
+      project.categories.forEach(cat => {
         if (classified.hasOwnProperty(cat)) {
           classified[cat].push(project);
         }
@@ -103,7 +90,7 @@ const PortfolioAnimation = () => {
                         <img src={project.thumbImage} alt="blog post"></img>
                       </div>
                       <div className="blog-info">
-                        <div className="meta">29/FEB/2020 - BY ALEX</div>
+                        <div className="meta">{project.date}</div>
                         <h6>
                           <a>
                             {project.title}
