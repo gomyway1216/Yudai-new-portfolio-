@@ -9,9 +9,8 @@ import PortfolioModal from './PortfolioModal';
 // import content from './content.json';
 import Modal from 'react-modal';
 import Contact from '../contact/Contact';
-import { addJobsToFirestore, readJobsFromFirestore, 
-  addEducationToFirestore, readProjectsFromFirestore, addProjectsToFirestore } 
-  from '../../api/firebase/firestoreOperations';
+import * as projectApi from '../../api/firebase/project';
+import * as util from '../../util/util';
 
 // Use the functions as needed
 
@@ -49,7 +48,7 @@ const PortfolioAnimation = () => {
   const classifyProjects = async () => {
     const classified = {All: [], 'Web App': [], Mobile: [], 'AI/ML': []};
 
-    const fetchedProjects = await readProjectsFromFirestore();
+    const fetchedProjects = await projectApi.getProjects();
 
     fetchedProjects.forEach(project => {
       // Add to 'All' category
@@ -90,7 +89,7 @@ const PortfolioAnimation = () => {
                         <img src={project.thumbImage} alt="blog post"></img>
                       </div>
                       <div className="blog-info">
-                        <div className="meta">{project.date}</div>
+                        <div className="meta">{util.formatDate(project.date)}</div>
                         <h6>
                           <a>
                             {project.title}

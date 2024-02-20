@@ -53,14 +53,3 @@ export const addProjectsToFirestore = async (projects) => {
     await addDoc(projectsCollection, project);
   }
 };
-
-// Function to read projects from Firestore and return them as an array of objects
-export const readProjectsFromFirestore = async () => {
-  const projectsCollection = collection(getDbAccess(), 'project');
-  const querySnapshot = await getDocs(projectsCollection);
-  const projects = [];
-  querySnapshot.forEach((doc) => {
-    projects.push({ id: doc.id, ...doc.data() });
-  });
-  return projects; // Return an array of project objects
-};

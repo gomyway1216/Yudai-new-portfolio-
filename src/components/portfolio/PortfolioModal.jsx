@@ -7,6 +7,7 @@ import Slider from 'react-slick';
 import { useAuth } from '../../provider/AuthProvider';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import * as util from '../../util/util';
 
 // Modal.setAppElement('#root');
 
@@ -178,7 +179,7 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                         <span className={'text-dark fw-600 me-2'}>
                               Date:
                         </span>
-                        {project.date}
+                        {util.formatDate(project.date)}
                       </li>
                       <li>
                         <span className={'text-dark fw-600 me-2'}>

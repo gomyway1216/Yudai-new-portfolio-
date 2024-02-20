@@ -28,7 +28,7 @@ export const createProject = async (project) => {
   const docRef = await addDoc(collection(getDbAccess(), 'project'),
     {
       title: project.title,
-      date: project.date,
+      date: project.date.current.toDate(),
       description: project.description,
       client: project.client,
       industry: project.industry,
@@ -45,7 +45,7 @@ export const updateProject = async (project) => {
   try {
     await updateDoc(doc(getDbAccess(), 'project', project.id), {
       title: project.title,
-      date: project.date,
+      date: project.date.toDate(), // convert from dayjs object to date object
       description: project.description,
       client: project.client,
       industry: project.industry,
@@ -79,7 +79,7 @@ export const getProject = async (id) => {
       const project = {
         id: querySnapshot.id,
         title: data.title,
-        date: data.date,
+        date: data.date.toDate(),
         description: data.description,
         client: data.client,
         industry: data.industry,
@@ -100,35 +100,15 @@ export const getProject = async (id) => {
   }
 };
 
-
-const getProjects = async () => {
+// Function to read projects from Firestore and return them as an array of objects
+export const getProjects = async () => {
+  const projectsCollection = collection(getDbAccess(), 'project');
+  const querySnapshot = await getDocs(projectsCollection);
   const projects = [];
-  const querySnapshot = await getDocs(collection(getDbAccess(), 'projects'));
-
   querySnapshot.forEach((doc) => {
-    const data = doc.data();
-
-    try {
-      const project = {
-        id: doc.id,
-        title: data.title,
-        date: data.date,
-        description: data.description,
-        client: data.client,
-        industry: data.industry,
-        thumbImage: data.thumbImage,
-        images: data.images,
-        urls: data.urls,
-        technologies: data.technologies,
-        categories: data.categories
-      };
-      projects.push(project);
-    } catch (e) {
-      console.error('error when getting post: ', e);
-    }
+    projects.push({ id: doc.id, ...doc.data(), date: doc.data().date.toDate() });
   });
-
-  return projects;
+  return projects; // Return an array of project objects
 };
 
 export const getProjectCategories = () => {

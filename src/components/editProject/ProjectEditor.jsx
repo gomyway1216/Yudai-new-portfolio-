@@ -10,7 +10,12 @@ import ImageUpload from '../image/ImageUpload';
 import { RichTextEditor } from '@mantine/rte';
 import * as imageApi from '../../api/firebase/image';
 import PropTypes from 'prop-types';
+import dayjs from 'dayjs';
 import ImageMultipleUpload from '../image/ImapgeMultipleUpload';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 const UPDATE_INTERVAL = 10000;
 
@@ -35,7 +40,7 @@ const ProjectEditor = (props) => {
   const [title, setTitle] = useState('');
   // we need to make sure we only inlcude year, month and day.
   // probaly we should use some type of date picker
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(dayjs());
   const [description, setDescription] = useState('');
   const [client, setClient] = useState('');
   const [industry, setIndustry] = useState('');
@@ -53,7 +58,7 @@ const ProjectEditor = (props) => {
   // auto save related states
   const [autoSave, setAutoSave] = useState(false);
   const [autoSaveTitle, setAutoSaveTitle] = useState('');
-  const [autoSaveDate, setAutoSaveDate] = useState('');
+  const [autoSaveDate, setAutoSaveDate] = useState(null);
   const [autoSaveDescription, setAutoSaveDescription] = useState('');
   const [autoSaveClient, setAutoSaveClient] = useState('');
   const [autoSaveIndustry, setAutoSaveIndustry] = useState('');
@@ -129,10 +134,9 @@ const ProjectEditor = (props) => {
       const doc = await props.getProject(props.projectId);
       if (doc) {
         setOriginal(doc);
-
         // set the state with the data from the server
         setTitle(doc.title);
-        setDate(doc.date);
+        setDate(dayjs(doc.date));
         setDescription(doc.description);
         setClient(doc.client);
         setIndustry(doc.industry);
@@ -238,7 +242,7 @@ const ProjectEditor = (props) => {
         const item = {
           id: props.projectId,
           title: titleRef.current,
-          date: original?.date || new Date(),
+          date: titleRef.current,
           description: descriptionRef.current,
           client: clientRef.current,
           industry: industryRef.current,
@@ -396,6 +400,16 @@ const ProjectEditor = (props) => {
             ))}
           </Select>
         </FormControl>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker', 'DatePicker']}>
+            {/* <DatePicker label="Uncontrolled picker" defaultValue={dayjs('2022-04-17')} /> */}
+            <DatePicker
+              label="Controlled picker"
+              value={date}
+              onChange={(newValue) => setDate(newValue)}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
         <div className={styles.switchWrapper}>
           {props.projectId &&
             <FormGroup>
