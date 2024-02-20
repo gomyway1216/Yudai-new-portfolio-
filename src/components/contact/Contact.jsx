@@ -1,16 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import * as contactApi from '../../api/firebase/contact';
+import { PropTypes } from 'prop-types';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
-const Contact = () => {
+const Contact = ({ blogId }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+  const [messageOpen, setMessgeOpen] = useState(false); 
 
-  const onSubmit = (data, e) => {
-    e.target.reset();
-    console.log('Message submited: ' + JSON.stringify(data));
+  console.log('blogId: ' + blogId);
+
+  const onSubmit = async (data) => {
+    try {
+      await contactApi.createContact({
+        blogId: blogId,
+        name: data.name,
+        email: data.email,
+        subject: data.subject,
+        comment: data.comment,
+        // Add any additional fields you need
+      });
+      console.log('Message submitted: ' + JSON.stringify(data));
+      reset(); // reset the form only on successful submission
+      setMessgeOpen(true);
+    } catch (error) {
+      console.error('Error submitting message: ', error);
+    }
+  };
+
+  const handleMessageClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setMessgeOpen(false);
   };
 
   return (
@@ -95,8 +123,17 @@ const Contact = () => {
           {/* End .col-12 */}
         </div>
       </form>
+      <Snackbar open={messageOpen} autoHideDuration={6000} onClose={handleMessageClose}>
+        <Alert onClose={handleMessageClose} severity="success" sx={{ width: '100%' }}>
+          Message sent successfully!
+        </Alert>
+      </Snackbar>
     </>
   );
+};
+
+Contact.propTypes = {
+  blogId: PropTypes.string,
 };
 
 export default Contact;

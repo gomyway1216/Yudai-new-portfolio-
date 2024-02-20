@@ -1,21 +1,24 @@
-import React, { useEffect, useState, useRef } from 'react';
-// add prop-types
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import Contact from '../contact/Contact';
 import Slider from 'react-slick';
 import { useAuth } from '../../provider/AuthProvider';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import * as util from '../../util/util';
+import DOMPurify from 'dompurify';
 
 // Modal.setAppElement('#root');
 
 const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  
   const sliderRef = useRef();
+
+  const purifiedDescription = DOMPurify.sanitize(project.description, {
+    ADD_TAGS: ['iframe'],
+    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling']
+  });
 
   const types = {
     IMAGE: 'image',
@@ -65,7 +68,6 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
   SlickArrowRight.propTypes = {
     currentSlide: PropTypes.number.isRequired,
     slideCount: PropTypes.number.isRequired,
-    // If you have other props, you should validate them here as well
   };
 
   var settings = {
@@ -153,8 +155,6 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                     </Slider>
                   </div>
                   <div className="col-md-5">
-                    {/* <h4 className="text-4 fw-600">Project Info:</h4>
-                    <p>{project.description}</p> */}
                     <h4 className="text-4 fw-600 mt-4">Project Details:</h4>
                     <ul className="list-style-2">
                       <li>
@@ -188,7 +188,7 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                         {project.urls.map((url, index) => (
                           <a
                             href={url.link}
-                            className="btn btn-primary shadow-none rounded-0 px-3 py-1"
+                            className="btn btn-primary shadow-none rounded-0 px-3 py-1 url-button"
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}
@@ -202,34 +202,11 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                   </div>
                 </div>
               </div>
-
-              {/* End blog-img */}
               <article className="article">
-                
-                {/* End .article-title */}
-
                 <div className="article-content">
-                  {project.description}
+                  <div dangerouslySetInnerHTML={{ __html: purifiedDescription }} />
                 </div>
-                {/* End article content */}
-                {/* <ul className="nav tag-cloud">
-                  <li href="#">Design</li>
-                  <li href="#">Development</li>
-                  <li href="#">Travel</li>
-                  <li href="#">Web Design</li>
-                  <li href="#">Marketing</li>
-                  <li href="#">Research</li>
-                  <li href="#">Managment</li>
-                </ul> */}
-                {/* End tag */}
               </article>
-              {/* End Article */}
-
-              <div className="contact-form article-comment">
-                <h4>Leave a Reply</h4>
-                <Contact />
-              </div>
-              {/* End .contact Form */}
             </div>
           </div>
         </div>

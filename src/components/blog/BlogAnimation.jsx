@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import Contact from '../contact/Contact';
 import * as postApi from '../../api/firebase/post';
-const { htmlToText } = require('html-to-text');
 import DOMPurify from 'dompurify';
 import * as util from '../../util/util';
 
@@ -130,7 +129,7 @@ const News = () => {
 
                 <div className="contact-form article-comment">
                   <h4>Leave a Reply</h4>
-                  <Contact />
+                  <Contact blogId={selectedPost.id}/>
                 </div>
                 {/* End .contact Form */}
               </div>
