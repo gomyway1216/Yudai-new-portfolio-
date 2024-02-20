@@ -1,7 +1,4 @@
 import * as fbConnect from './firebaseConnect';
-import {
-  Firestore,
-} from 'firebase/firestore';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 
 export const getDbAccess = () => {

@@ -1,20 +1,35 @@
 .root {
   margin-top: 100px;
+  margin-bottom: 40px;
   margin-left: 5%;
   margin-right: 5%;
   background: white;
 
   .subSection {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     margin-bottom: 20px;
 
-    .titleWrapper {
-      .title {
-        width: 500px;
-      }
+    .firstRow {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
     }
+
+    .secondRow {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    // .titleWrapper {
+    //   .title {
+    //     width: 500px;
+    //   }
+    // }
 
     .switchWrapper {
       display: flex;

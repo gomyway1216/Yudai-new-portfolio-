@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, FormGroup, FormControlLabel, TextField, Switch,
-  FormControl, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Button, FormGroup, FormControlLabel, TextField, Switch } from '@mui/material';
 import DeleteItemDialog from '../dialog/DeleteItemDialog';
 import InstantMessage from '../popUp/Alert';
 import styles from './rich-text-editor.module.scss';
@@ -12,23 +11,12 @@ import * as imageApi from '../../api/firebase/image';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import ImageMultipleUpload from '../image/ImapgeMultipleUpload';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import UrlListEditor from '../url/UrlListEditor';
+import CategorySelector from '../category/CategorySelector';
+import DateSelector from '../date/DateSelector';
+import TechnologiesSelector from '../technology/TechnologiesSelector';
 
 const UPDATE_INTERVAL = 10000;
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const ProjectEditor = (props) => {
   const navigate = useNavigate();
@@ -44,7 +32,7 @@ const ProjectEditor = (props) => {
   const [description, setDescription] = useState('');
   const [client, setClient] = useState('');
   const [industry, setIndustry] = useState('');
-  const [urls, setUrls] = useState([]); // Array of URLs
+  const [urls, setUrls] = useState([{ name: '', link: '' }]); // Array of URLs
   const [technologies, setTechnologies] = useState([]);
   const [categories, setCategories] = useState([]);
   const [thumbImage, setThumbImage] = useState('');
@@ -80,7 +68,6 @@ const ProjectEditor = (props) => {
   const urlsRef = useRef(urls);
   const technologiesRef = useRef(technologies);
   const categogiesRef = useRef(categories);
-
 
   // keep track of update status
   // const [status, setStatus] = useState<'idle' | 'updating' | 'deleting'>('idle');
@@ -282,11 +269,6 @@ const ProjectEditor = (props) => {
     }
   }, [status, autoSave]);
 
-
-  const handleTitleChange = (e) => {
-    setTitle(e.target.value);
-  };
-
   const onAutoSaveSwitchChange = (e) => {
     setAutoSave(e.target.checked);
   };
@@ -358,58 +340,46 @@ const ProjectEditor = (props) => {
   };
 
   const handleCategoriesChange = (event) => {
-    // Get the value from the event object
     const value = event.target.value;
-    // 'value' will be an array of category objects if it's coming from the Select component
-    // Set the state to that array
-    setCategories(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
-    );
+    setCategories(typeof value === 'string' ? value.split(',') : value);
   };
 
   return (
     <div className={styles.root}>
       <div className={styles.subSection}>
-        <div className={styles.titleWrapper}>
-          <TextField id="outlined-basic" label="Title"
-            variant="outlined" value={title}
-            onChange={handleTitleChange}
-            className={styles.title}
+        <div className={styles.firstRow}>
+          <div className={styles.titleWrapper}>
+            <TextField id="title" label="Title"
+              variant="outlined" value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={styles.title}
+            />
+          </div>
+          <CategorySelector
+            categoryList={categoryList}
+            selectedCategories={categories}
+            onCategoryChange={handleCategoriesChange}
+          />
+          <DateSelector
+            date={date}
+            setDate={setDate}
           />
         </div>
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="category-multiple-name-label">Category</InputLabel>
-          <Select
-            labelId="category-multiple-name-label"
-            id="category-multiple-name"
-            multiple
-            value={categories}
-            onChange={handleCategoriesChange}
-            input={<OutlinedInput label="Category" />}
-            MenuProps={MenuProps}
-          >
-            {categoryList.map((category) => (
-              <MenuItem
-                key={category} 
-                value={category}
-                // style={getStyles(category, personName, theme)}
-              >
-                {category}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={['DatePicker', 'DatePicker']}>
-            {/* <DatePicker label="Uncontrolled picker" defaultValue={dayjs('2022-04-17')} /> */}
-            <DatePicker
-              label="Controlled picker"
-              value={date}
-              onChange={(newValue) => setDate(newValue)}
+        <div className={styles.secondRow}>
+          <div>
+            <TextField id="client" label="Client"
+              variant="outlined" value={client}
+              onChange={(e) => setClient(e.target.value)}
             />
-          </DemoContainer>
-        </LocalizationProvider>
+          </div>
+          <div>
+            <TextField id="industry" label="Industry"
+              variant="outlined" value={industry}
+              onChange={(e) => setIndustry(e.target.value)}
+            />
+          </div>
+          <UrlListEditor urls={urls} setUrls={setUrls} />
+        </div>
         <div className={styles.switchWrapper}>
           {props.projectId &&
             <FormGroup>
@@ -426,6 +396,10 @@ const ProjectEditor = (props) => {
           }
         </div>
       </div>
+      <TechnologiesSelector
+        selectedTechnologies={technologies}
+        setSelectedTechnologies={setTechnologies}
+      />
       <ImageUpload 
         id={props.projectId} 
         type="project"

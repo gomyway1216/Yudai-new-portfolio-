@@ -2,21 +2,11 @@ import * as fbConnect from './firebaseConnect';
 import {
   addDoc,
   collection,
-  collectionGroup,
-  Timestamp,
   deleteDoc,
   doc,
-  DocumentData,
-  DocumentSnapshot,
-  Firestore,
   getDoc,
   getDocs,
-  limit,
-  query,
-  updateDoc,
-  where,
-  orderBy,
-  startAfter
+  updateDoc
 } from 'firebase/firestore';
 
 

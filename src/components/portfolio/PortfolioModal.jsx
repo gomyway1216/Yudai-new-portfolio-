@@ -185,15 +185,18 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                         <span className={'text-dark fw-600 me-2'}>
                               URL:
                         </span>
-                        <a
-                          href={project.urls[0].link}
-                          className="btn btn-primary shadow-none rounded-0 px-3 py-1"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {project.urls[0].name}
-                          <i className="fas fa-external-link-alt ms-1" />
-                        </a>
+                        {project.urls.map((url, index) => (
+                          <a
+                            href={url.link}
+                            className="btn btn-primary shadow-none rounded-0 px-3 py-1"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            key={index}
+                          >
+                            {url.name}
+                            <i className="fas fa-external-link-alt ms-1" />
+                          </a>
+                        ))}
                       </li>
                     </ul>
                   </div>
