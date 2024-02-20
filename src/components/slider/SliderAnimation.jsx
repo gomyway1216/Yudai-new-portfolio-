@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TextLoop from 'react-text-loop';
+import * as profileApi from '../../api/firebase/profile';
 
 const conctInfo = {
   email: 'uwyudai@gmail.com',
@@ -17,6 +18,17 @@ const sliderContent = {
 };
 
 const Slider = () => {
+  const [resumeLink, setResumeLink] = useState('');
+
+  const fetchLink = async () => {
+    const link = await profileApi.getResumeLink();
+    setResumeLink(link);
+  };
+
+  useEffect(async () => {
+    await fetchLink();
+  }, []);
+
   return (
     <>
       {/*  Home Banner */}
@@ -83,7 +95,7 @@ const Slider = () => {
                 >
                   <a
                     className="px-btn px-btn-white"
-                    href="https://drive.google.com/file/d/1qxUi6gFq6jq9x3q_ggzN0YTgdFY-obKt/view?usp=sharing"
+                    href={resumeLink}
                     download
                   >
                     {sliderContent.btnText}
