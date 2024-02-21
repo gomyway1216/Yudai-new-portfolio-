@@ -32,7 +32,7 @@ const ProjectEditor = (props) => {
   const [description, setDescription] = useState('');
   const [client, setClient] = useState('');
   const [industry, setIndustry] = useState('');
-  const [urls, setUrls] = useState([{ name: '', link: '' }]); // Array of URLs
+  const [urls, setUrls] = useState([{ name: '', link: '', type: '' }]); // Array of URLs
   const [technologies, setTechnologies] = useState([]);
   const [categories, setCategories] = useState([]);
   const [thumbImage, setThumbImage] = useState('');
@@ -378,8 +378,8 @@ const ProjectEditor = (props) => {
               onChange={(e) => setIndustry(e.target.value)}
             />
           </div>
-          <UrlListEditor urls={urls} setUrls={setUrls} />
         </div>
+        <UrlListEditor urls={urls} setUrls={setUrls} />
         <div className={styles.switchWrapper}>
           {props.projectId &&
             <FormGroup>

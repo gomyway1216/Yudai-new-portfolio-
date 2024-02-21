@@ -7,6 +7,8 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import * as util from '../../util/util';
 import DOMPurify from 'dompurify';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 // Modal.setAppElement('#root');
 
@@ -40,7 +42,7 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
       aria-disabled={currentSlide === 0 ? true : false}
       type="button"
     >
-      <i className="fa fa-chevron-left"></i>
+      <KeyboardArrowLeftIcon sx={{ display: 'flex', margin: 'auto' }}/>
     </button>
   );
 
@@ -61,7 +63,7 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
       aria-disabled={currentSlide === slideCount - 1 ? true : false}
       type="button"
     >
-      <i className="fa fa-chevron-right"></i>
+      <KeyboardArrowRightIcon sx={{ display: 'flex', margin: 'auto' }}/>
     </button>
   );
 
@@ -155,7 +157,7 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                     </Slider>
                   </div>
                   <div className="col-md-5">
-                    <h4 className="text-4 fw-600 mt-4">Project Details:</h4>
+                    <h4 className="text-4 fw-600">Project Details:</h4>
                     <ul className="list-style-2">
                       <li>
                         <span className={'text-dark fw-600 me-2'}>
@@ -167,7 +169,15 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                         <span className={'text-dark fw-600 me-2'}>
                               Technologies:
                         </span>
-                        {project.technologies}
+                        {project.technologies.map((tech, index) => {
+                          const badgeColor = tech.type === 'language' ? 'bg-primary'
+                            : tech.type === 'framework' ? 'bg-secondary' : 'bg-success';
+                          return (
+                            <span key={index} className={`badge ${badgeColor} me-1 technology`}>
+                              {tech.name}
+                            </span>
+                          );
+                        })}
                       </li>
                       <li>
                         <span className={'text-dark fw-600 me-2'}>
@@ -185,18 +195,21 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
                         <span className={'text-dark fw-600 me-2'}>
                               URL:
                         </span>
-                        {project.urls.map((url, index) => (
-                          <a
-                            href={url.link}
-                            className="btn btn-primary shadow-none rounded-0 px-3 py-1 url-button"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            key={index}
-                          >
-                            {url.name}
-                            <i className="fas fa-external-link-alt ms-1" />
-                          </a>
-                        ))}
+                        {project.urls.map((url, index) => {
+                          const badgeColor = url.type === 'GitHub' ? 'badge-github'
+                            : url.type === 'Website' ? 'badge-website' : 'badge-secondary';
+                          return (
+                            <a
+                              href={url.link}
+                              className={`btn ${badgeColor} shadow-none rounded-0 px-2 py-0 url-button`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              key={index}
+                            >
+                              {url.name}
+                              {/* <i className="fas fa-external-link-alt ms-1" /> */}
+                            </a>
+                          );})}
                       </li>
                     </ul>
                   </div>

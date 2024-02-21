@@ -30,7 +30,7 @@ const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies })
 
   useEffect(() => {
     const fetchTechnologies = async () => {
-      const technologies = await technologyApi.getTechnologyNames();
+      const technologies = await technologyApi.getTechnologies();
       setTechnologiesList(technologies);
     };
     fetchTechnologies();
@@ -40,8 +40,8 @@ const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies })
     const {
       target: { value },
     } = event;
+
     setSelectedTechnologies(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
@@ -58,20 +58,20 @@ const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies })
         input={<OutlinedInput id="select-multiple-chip" label="Technologies" />}
         renderValue={(selected) => (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {selected.map((value) => (
-              <Chip key={value} label={value} />
+            {selected.map((technology) => (
+              <Chip key={technology.id} label={technology.name} />
             ))}
           </Box>
         )}
         MenuProps={MenuProps}
       >
-        {technologiesList.map((name) => (
+        {technologiesList.map((technology) => (
           <MenuItem
-            key={name}
-            value={name}
-            style={getStyles(name, selectedTechnologies, theme)}
+            key={technology.id}
+            value={technology}
+            style={getStyles(technology, selectedTechnologies, theme)}
           >
-            {name}
+            {technology.name}
           </MenuItem>
         ))}
       </Select>

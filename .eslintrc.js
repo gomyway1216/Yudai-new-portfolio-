@@ -26,7 +26,7 @@ module.exports = {
     // we want to avoid useless spaces
     'no-multi-spaces': ['error'],
     'max-len': ['error', {
-      'code': 100,
+      'code': 120,
       'ignoreUrls': true,
     }],
     'react/react-in-jsx-scope': 'off'

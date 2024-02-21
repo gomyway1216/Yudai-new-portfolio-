@@ -104,3 +104,12 @@ export const getProjects = async () => {
 export const getProjectCategories = () => {
   return ['Web App', 'Mobile', 'AL/ML'];
 };
+
+export const getUrlTypeList = async () => {
+  const urlTypes = await getDocs(collection(getDbAccess(), 'urlType'));
+  const urlTypeList = [];
+  urlTypes.forEach((doc) => {
+    urlTypeList.push(doc.data().name);
+  });
+  return urlTypeList;
+};

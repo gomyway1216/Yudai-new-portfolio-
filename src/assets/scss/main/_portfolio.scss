@@ -316,4 +316,20 @@
 .url-button {
   margin-right: 8px; /* adjust the value as needed */
   margin-bottom: 8px; /* adjust the value as needed */
+  padding: 0;
+}
+
+.badge-github {
+  background-color: blue;
+  color: white;
+}
+
+.badge-website {
+  background-color: green;
+  color: white;
+}
+
+.badge-secondary {
+  background-color: grey;
+  color: white;
 }

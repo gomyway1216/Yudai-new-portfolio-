@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
+import * as projectApi from '../../api/firebase/project';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 const UrlListEditor = ({ urls, setUrls }) => {
+  const [urlTypeList, setUrlTypeList] = useState([]);
+
+  const fetchUrlTypeList = async () => {
+    const urlTypeList = await projectApi.getUrlTypeList();
+    setUrlTypeList(urlTypeList);
+  };
+
+  useEffect(() => {
+    fetchUrlTypeList();
+  }, []);
+
   const handleAddUrl = () => {
-    setUrls([...urls, { name: '', link: '' }]);
+    setUrls([...urls, { name: '', link: '', type: '' }]);
   };
 
   const handleRemoveUrl = (index) => {
@@ -13,10 +26,10 @@ const UrlListEditor = ({ urls, setUrls }) => {
     setUrls(newUrls);
   };
 
-  const handleChangeUrl = (index, newName, newLink) => {
+  const handleChangeUrl = (index, newName, newLink, newType) => {
     const newUrls = urls.map((url, i) => {
       if (i === index) {
-        return { ...url, name: newName, link: newLink };
+        return { ...url, name: newName, link: newLink, type: newType};
       }
       return url;
     });
@@ -43,22 +56,39 @@ const UrlListEditor = ({ urls, setUrls }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}
+                    style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}
+                    className='url-item'
                   >
                     <TextField
                       type="text"
                       value={url.name}
                       placeholder="Name"
-                      onChange={(e) => handleChangeUrl(index, e.target.value, url.link)}
-                      style={{ flexGrow: 1, marginRight: '8px' }}
+                      onChange={(e) => handleChangeUrl(index, e.target.value, url.link, url.type)}
+                      style={{ flex: 1, marginRight: '8px' }}
                     />
                     <TextField
                       type="text"
                       value={url.link}
                       placeholder="Link"
-                      onChange={(e) => handleChangeUrl(index, url.name, e.target.value)}
-                      style={{ flexGrow: 1, marginRight: '8px' }}
+                      onChange={(e) => handleChangeUrl(index, url.name, e.target.value, url.type)}
+                      style={{ flex: 3, marginRight: '8px' }}
                     />
+                    <FormControl fullWidth style={{ flex: 1 }}>
+                      <InputLabel id="url-type-select-label">Url Type</InputLabel>
+                      <Select
+                        labelId="url-type-select-label"
+                        id="url-type-select"
+                        value={url.type}
+                        label="Url type"
+                        onChange={(e) => handleChangeUrl(index, url.name, url.link, e.target.value)}
+                      >
+                        {urlTypeList.map((type, i) => (
+                          <MenuItem key={i} value={type}>
+                            {type}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                     <Button onClick={() => handleRemoveUrl(index)}>Remove</Button>
                   </div>
                 )}

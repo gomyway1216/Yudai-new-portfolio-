@@ -14,8 +14,6 @@ const Contact = ({ blogId }) => {
   } = useForm();
   const [messageOpen, setMessgeOpen] = useState(false); 
 
-  console.log('blogId: ' + blogId);
-
   const onSubmit = async (data) => {
     try {
       await contactApi.createContact({
