@@ -25,8 +25,8 @@ const Slider = () => {
     setResumeLink(link);
   };
 
-  useEffect(async () => {
-    await fetchLink();
+  useEffect(() => {
+    fetchLink();
   }, []);
 
   return (
