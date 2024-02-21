@@ -11,10 +11,23 @@ const getDbAccess = () => {
 
 export const getTechnologies = async () => {
   const querySnapshot = await getDocs(collection(getDbAccess(), 'technology'));
-  const technologies = [];
+  let technologies = [];
   querySnapshot.forEach((doc) => {
     technologies.push({ id: doc.id, ...doc.data() });
   });
+
+  // Sorting priorities for types
+  const typePriority = { 'language': 1, 'framework': 2, 'database': 3 };
+
+  technologies.sort((a, b) => {
+    // Sort by type using the defined priorities
+    const typeDifference = (typePriority[a.type] || 4) - (typePriority[b.type] || 4);
+    if (typeDifference !== 0) return typeDifference;
+
+    // If types are the same, sort by name alphabetically
+    return a.name.localeCompare(b.name);
+  });
+
   return technologies;
 };
 

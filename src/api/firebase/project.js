@@ -18,7 +18,7 @@ export const createProject = async (project) => {
   const docRef = await addDoc(collection(getDbAccess(), 'project'),
     {
       title: project.title,
-      date: project.date.current.toDate(),
+      date: project.date.toDate(),
       description: project.description,
       client: project.client,
       industry: project.industry,
@@ -102,7 +102,7 @@ export const getProjects = async () => {
 };
 
 export const getProjectCategories = () => {
-  return ['Web App', 'Mobile', 'AL/ML'];
+  return ['Web App', 'Mobile', 'AI/ML'];
 };
 
 export const getUrlTypeList = async () => {
