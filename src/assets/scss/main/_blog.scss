@@ -1,10 +1,26 @@
 .blog-grid {
   cursor: pointer;
+
   .blog-img {
     overflow: hidden;
+    // max-height: 400px;
+    position: relative; /* Add this to position your img absolutely inside this container */
+    width: 100%; /* Set width to 100% of the parent */
+    height: 0; /* Set height to 0 to make padding-top control the height */
+    padding-top: 56.25%; /* This percentage gives an aspect ratio of 16:9 */
+
     img {
       @include transition(ease all 0.35s);
       @include scale(1);
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* This makes sure that the image is scaled properly */
+      max-width: 100%; /* Ensures image is not larger than the container */
+      max-height: 100%; /* Ensures image is not larger than the container */
     }
   }
   .blog-info {

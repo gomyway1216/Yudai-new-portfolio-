@@ -126,9 +126,6 @@ const PortfolioModal = ({ project, isOpen, setIsOpen }) => {
           <div className="scrollable">
             <div className="blog-grid">
               <div className={'container ajax-container '}>
-                {/* <div className="blog-img">
-                  <img src="img/blog/blog-4.jpg" alt="blog post"></img>
-                </div> */}
                 <h2 className={'text-6 fw-600 text-center mb-4'}>
                   {project.title}
                 </h2>

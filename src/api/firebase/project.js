@@ -102,7 +102,7 @@ export const getProjects = async () => {
 };
 
 export const getProjectCategories = () => {
-  return ['Web App', 'Mobile', 'AI/ML'];
+  return ['Web App', 'Mobile', 'AI/ML', 'Console'];
 };
 
 export const getUrlTypeList = async () => {
