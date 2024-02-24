@@ -71,7 +71,7 @@ const Header = () => {
                 href="#home"
                 data-tip
                 data-for="HOME"
-                onClick={handleMenu}
+                onClick={handleClick}
               >
                 <FaHome />
                 <ReactTooltip
@@ -160,7 +160,7 @@ const Header = () => {
                 </ReactTooltip>
               </a>
             </li>
-            <li>
+            {/* <li>
               <a
                 className="nav-link"
                 href="#contactus"
@@ -178,7 +178,7 @@ const Header = () => {
                   <span>Contact</span>
                 </ReactTooltip>
               </a>
-            </li>
+            </li> */}
             {currentUser && <li>
               <a
                 className="nav-link"

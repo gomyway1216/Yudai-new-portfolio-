@@ -22,16 +22,12 @@ const HomeOne = () => {
   return (
     <div className="main-left">
       <Header />
-      {/* End Header Section */}
 
       <Slider />
-      {/* End Slider Section */}
 
       <About />
-      {/* End About Section */}
 
       <Resume />
-      {/* End Resume Section */}
 
       <section id="work" className="section theme-light dark-bg">
         <div className="container">
@@ -88,14 +84,12 @@ const HomeOne = () => {
           </div>
         </div>
       </section> */}
-      {/* End Contact Section */}
 
       <footer className="footer white">
         <div className="container">
           <Footer />
         </div>
       </footer>
-      {/* End Contact Section */}
     </div>
   );
 };

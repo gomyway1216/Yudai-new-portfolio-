@@ -1,21 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { Gallery, Item } from 'react-photoswipe-gallery';
 import 'photoswipe/dist/photoswipe.css';
-import { FiLink } from 'react-icons/fi';
-import Masonry from 'react-masonry-css';
 import PortfolioModal from './PortfolioModal';
-// import content from content.json
-// import content from './content.json';
-import Modal from 'react-modal';
-import Contact from '../contact/Contact';
 import * as projectApi from '../../api/firebase/project';
 import * as util from '../../util/util';
-
-// Use the functions as needed
-
-
-// Modal.setAppElement('#root');
 
 const breakpointColumnsObj = {
   default: 3,
@@ -27,14 +15,11 @@ const breakpointColumnsObj = {
 
 const tabList = ['All', 'Web App', 'Mobile', 'AI/ML'];
 
-// Modal.setAppElement('#root');
-
 const PortfolioAnimation = () => {
   const [projectsByCategory, setProjectsByCategory] 
     = useState({'All': [], 'Web App': [], 'Mobile': [], 'AI/ML': []});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     classifyProjects();
@@ -103,7 +88,6 @@ const PortfolioAnimation = () => {
               
             </TabPanel>
           ))}
-          {/* End tabpanel */}
         </Tabs>
       </div>
 
