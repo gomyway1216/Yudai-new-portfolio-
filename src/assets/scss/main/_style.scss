@@ -451,15 +451,15 @@
         line-height: inherit;
       }
 
-      // &:nth-child(1) {
-      //   top: -25px;
-      // }
+      &:nth-child(1) {
+        top: -8px;
+      }
       &:nth-child(2) {
         top: 8px;
       }
-      // &:nth-child(3) {
-      //   top: -8px;
-      // }
+      &:nth-child(3) {
+        top: 8px;
+      }
       &:nth-child(4) {
         top: -8px;
       }

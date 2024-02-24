@@ -104,7 +104,7 @@ const Skills = () => {
                 // End skill-lt
               ))}
               {filteredSkills.length > 4 && (
-                <button onClick={() => setShowMore(!showMore)}>
+                <button onClick={() => setShowMore(!showMore)} className="show-more-button">
                   {showMore ? 'Show Less' : 'Show More'}
                 </button>
               )}
