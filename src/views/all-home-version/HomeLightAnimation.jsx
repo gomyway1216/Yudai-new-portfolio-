@@ -49,7 +49,7 @@ const HomeOne = () => {
             <h3>Latest Blog.</h3>
           </div>
           <Blog />
-          <div onClick={() => navigate('/all')}>Check more blogs</div>
+          {/* <div onClick={() => navigate('/all')}>Check more blogs</div> */}
         </div>
       </section>
       {/* End Portfolio Section */}

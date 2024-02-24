@@ -8,7 +8,7 @@ import * as util from '../../util/util';
 
 // Modal.setAppElement('#root');
 
-const News = () => {
+const Blogs = () => {
   // const [isOpen, setIsOpen] = useState(false);
   // const [isOpen2, setIsOpen2] = useState(false);
   // const [isOpen3, setIsOpen3] = useState(false);
@@ -41,6 +41,10 @@ const News = () => {
     });
     setBody(purifiedBody);
   };
+
+  if (posts.length === 0) {
+    return <div>Coming soon...</div>;
+  }
 
   return (
     <>
@@ -143,4 +147,4 @@ const News = () => {
   );
 };
 
-export default News;
+export default Blogs;
