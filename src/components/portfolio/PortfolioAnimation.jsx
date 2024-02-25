@@ -13,11 +13,11 @@ const breakpointColumnsObj = {
 };
 
 
-const tabList = ['All', 'Web App', 'Mobile', 'AI/ML'];
+const tabList = ['All', 'Web App', 'Mobile', 'AI/ML', 'Console'];
 
 const PortfolioAnimation = () => {
   const [projectsByCategory, setProjectsByCategory] 
-    = useState({'All': [], 'Web App': [], 'Mobile': [], 'AI/ML': []});
+    = useState({'All': [], 'Web App': [], 'Mobile': [], 'AI/ML': [], 'Console': []});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -31,7 +31,7 @@ const PortfolioAnimation = () => {
   };
 
   const classifyProjects = async () => {
-    const classified = {All: [], 'Web App': [], Mobile: [], 'AI/ML': []};
+    const classified = {All: [], 'Web App': [], Mobile: [], 'AI/ML': [], 'Console': []};
 
     const fetchedProjects = await projectApi.getProjects();
 
