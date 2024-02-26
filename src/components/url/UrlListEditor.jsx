@@ -3,7 +3,9 @@ import { Button, TextField } from '@mui/material';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
 import * as projectApi from '../../api/firebase/project';
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import styles from './url-list-editor.module.scss';
 
 const UrlListEditor = ({ urls, setUrls }) => {
   const [urlTypeList, setUrlTypeList] = useState([]);
@@ -56,8 +58,8 @@ const UrlListEditor = ({ urls, setUrls }) => {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}
-                    className='url-item'
+                    // style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}
+                    className={styles.urlItem}
                   >
                     <TextField
                       type="text"
@@ -89,7 +91,14 @@ const UrlListEditor = ({ urls, setUrls }) => {
                         ))}
                       </Select>
                     </FormControl>
-                    <Button onClick={() => handleRemoveUrl(index)}>Remove</Button>
+                    <IconButton 
+                      aria-label="clera-icon" 
+                      color="success"
+                      onClick={() => handleRemoveUrl(index)}
+                      className={styles.iconButton}
+                    >
+                      <ClearIcon />
+                    </IconButton>
                   </div>
                 )}
               </Draggable>

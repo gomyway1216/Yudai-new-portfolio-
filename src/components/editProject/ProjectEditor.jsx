@@ -229,15 +229,15 @@ const ProjectEditor = (props) => {
         const item = {
           id: props.projectId,
           title: titleRef.current,
-          date: titleRef.current,
+          date: dateRef.current,
           description: descriptionRef.current,
           client: clientRef.current,
           industry: industryRef.current,
           thumbImage: thumbImage,
           images: images,
           urls: urlsRef.current,
-          technologies: technologies,
-          categories: project.categories
+          technologies: technologiesRef.current,
+          categories: categogiesRef.current
         };
         try {
           if (deepCompare()) {
@@ -347,41 +347,16 @@ const ProjectEditor = (props) => {
   return (
     <div className={styles.root}>
       <div className={styles.subSection}>
-        <div className={styles.firstRow}>
-          <div className={styles.titleWrapper}>
-            <TextField id="title" label="Title"
-              variant="outlined" value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={styles.title}
-            />
-          </div>
-          <CategorySelector
-            categoryList={categoryList}
-            selectedCategories={categories}
-            onCategoryChange={handleCategoriesChange}
+        <div className={styles.row}>
+          <TextField id="title" 
+            label="Title"
+            variant="outlined" 
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={styles.title}
           />
-          <DateSelector
-            date={date}
-            setDate={setDate}
-          />
-        </div>
-        <div className={styles.secondRow}>
-          <div>
-            <TextField id="client" label="Client"
-              variant="outlined" value={client}
-              onChange={(e) => setClient(e.target.value)}
-            />
-          </div>
-          <div>
-            <TextField id="industry" label="Industry"
-              variant="outlined" value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-            />
-          </div>
-        </div>
-        <UrlListEditor urls={urls} setUrls={setUrls} />
-        <div className={styles.switchWrapper}>
-          {props.projectId &&
+          <div className={styles.switchWrapper}>
+            {props.projectId &&
             <FormGroup>
               <FormControlLabel
                 className={styles.switch}
@@ -393,25 +368,50 @@ const ProjectEditor = (props) => {
                 }
                 label="Auto Save" />
             </FormGroup>
-          }
+            }
+          </div>
         </div>
+        <div className={styles.row}>
+          <CategorySelector
+            categoryList={categoryList}
+            selectedCategories={categories}
+            onCategoryChange={handleCategoriesChange}
+          />
+          <DateSelector
+            date={date}
+            setDate={setDate}
+          />
+        </div>
+        <div className={styles.row}>
+          <TextField id="client" label="Client"
+            variant="outlined" value={client}
+            onChange={(e) => setClient(e.target.value)}
+          />
+          <TextField id="industry" label="Industry"
+            variant="outlined" value={industry}
+            onChange={(e) => setIndustry(e.target.value)}
+          />
+        </div>
+        <UrlListEditor urls={urls} setUrls={setUrls} />
       </div>
       <TechnologiesSelector
         selectedTechnologies={technologies}
         setSelectedTechnologies={setTechnologies}
       />
-      <ImageUpload 
-        id={props.projectId} 
-        type="project"
-        handleImageUrl={handleImageUrl} 
-        originalImageUrl={thumbImage} 
-      />
-      <ImageMultipleUpload
-        id={props.projectId}
-        type="project"
-        handleImageUrls={handleImageUrls}
-        originalImageUrls={images} // Pass the current array of image URLs for display
-      />
+      <div className={styles.imageUploads}>
+        <ImageUpload 
+          id={props.projectId} 
+          type="project"
+          handleImageUrl={handleImageUrl} 
+          originalImageUrl={thumbImage} 
+        />
+        <ImageMultipleUpload
+          id={props.projectId}
+          type="project"
+          handleImageUrls={handleImageUrls}
+          originalImageUrls={images} // Pass the current array of image URLs for display
+        />
+      </div>
       <RichTextEditor value={description} onChange={setDescription} 
         onImageUpload={imageApi.getMenuImageRef} />
       <div className={styles.buttons}>

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Box, Button, LinearProgress, IconButton } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear'; // Import the clear icon
 import * as api from '../../api/firebase/image';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import styles from './image-upload.module.scss';
 
 const ImageUpload = (props) => {
   const [imageUrl, setImageUrl] = useState(props.originalImageUrl || ''); // State for the image URL
@@ -35,7 +37,7 @@ const ImageUpload = (props) => {
   };
 
   return (
-    <>
+    <div className={styles.imageUploadRoot}>
       <div className="uploadButton">
         <input
           accept="image/*"
@@ -52,8 +54,13 @@ const ImageUpload = (props) => {
           }}
         />
         <label htmlFor="select-image">
-          <Button variant="contained" color="primary" component="span">
-            Upload Image
+          <Button 
+            variant="contained" 
+            color="primary" 
+            component="span"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload Main Image
           </Button>
         </label>
       </div>
@@ -63,7 +70,7 @@ const ImageUpload = (props) => {
       {imageUrl && (
         <Box 
           mt={2} 
-          sx={{ width: '40%' }} 
+          sx={{ width: '20%' }} 
           className="imagePreviewContainer"
         >
           <img src={imageUrl} alt="Uploaded" className="imagePreview" />
@@ -72,7 +79,7 @@ const ImageUpload = (props) => {
           </IconButton>
         </Box>
       )}
-    </>
+    </div>
   );
 };
 

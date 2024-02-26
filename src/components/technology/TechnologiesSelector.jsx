@@ -3,6 +3,7 @@ import { Box, Chip, FormControl, InputLabel, MenuItem,
   OutlinedInput, Select, useTheme } from '@mui/material';
 import PropTypes from 'prop-types';
 import * as technologyApi from '../../api/firebase/technology';
+import styles from './technologies-selector.module.scss';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -10,19 +11,9 @@ const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
     },
   },
 };
-
-function getStyles(name, selectedTechnologies, theme) {
-  return {
-    fontWeight:
-      selectedTechnologies.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
 
 const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies }) => {
   const theme = useTheme();
@@ -47,7 +38,9 @@ const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies })
   };
 
   return (
-    <FormControl sx={{ m: 1, width: '100%' }}>
+    <FormControl 
+      className={styles.technologiesForm} 
+    >
       <InputLabel id="multiple-chip-label">Technologies</InputLabel>
       <Select
         labelId="multiple-chip-label"
@@ -57,7 +50,7 @@ const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies })
         onChange={handleChange}
         input={<OutlinedInput id="select-multiple-chip" label="Technologies" />}
         renderValue={(selected) => (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+          <Box >
             {selected.map((technology) => (
               <Chip key={technology.id} label={technology.name} />
             ))}
@@ -69,7 +62,6 @@ const TechnologiesSelector = ({ selectedTechnologies, setSelectedTechnologies })
           <MenuItem
             key={technology.id}
             value={technology}
-            style={getStyles(technology, selectedTechnologies, theme)}
           >
             {technology.name}
           </MenuItem>

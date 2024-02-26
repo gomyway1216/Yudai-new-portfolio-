@@ -15,7 +15,7 @@ const MenuProps = {
 
 const CategorySelector = ({ categoryList, selectedCategories, onCategoryChange }) => {
   return (
-    <FormControl sx={{ m: 1, width: 300 }}>
+    <FormControl sx={{ width: 300 }}>
       <InputLabel id="category-multiple-name-label">Category</InputLabel>
       <Select
         labelId="category-multiple-name-label"

@@ -4,6 +4,8 @@ import { Box, Button, LinearProgress, IconButton } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';// Import the delete icon
 import * as api from '../../api/firebase/image';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import styles from './image-upload.module.scss';
 
 const ImageMultipleUpload = (props) => {
   const [selectedImages, setSelectedImages] = useState([]); // Array to hold multiple images
@@ -56,7 +58,7 @@ const ImageMultipleUpload = (props) => {
   };
 
   return (
-    <>
+    <div className={styles.imageMultipleUploadRoot}>
       <div className="uploadButton">
         <input
           accept="image/*"
@@ -77,8 +79,13 @@ const ImageMultipleUpload = (props) => {
           }}
         />
         <label htmlFor="select-multiple-image">
-          <Button variant="contained" color="primary" component="span">
-            Upload Images
+          <Button 
+            variant="contained" 
+            color="primary" 
+            component="span"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload Sub Images
           </Button>
         </label>
       </div>
@@ -116,9 +123,8 @@ const ImageMultipleUpload = (props) => {
             </Box>
           )}
         </Droppable>
-      </DragDropContext>   
-
-    </>
+      </DragDropContext>
+    </div>
   );
 };
 
