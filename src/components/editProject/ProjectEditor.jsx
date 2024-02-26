@@ -398,20 +398,18 @@ const ProjectEditor = (props) => {
         selectedTechnologies={technologies}
         setSelectedTechnologies={setTechnologies}
       />
-      <div className={styles.imageUploads}>
-        <ImageUpload 
-          id={props.projectId} 
-          type="project"
-          handleImageUrl={handleImageUrl} 
-          originalImageUrl={thumbImage} 
-        />
-        <ImageMultipleUpload
-          id={props.projectId}
-          type="project"
-          handleImageUrls={handleImageUrls}
-          originalImageUrls={images} // Pass the current array of image URLs for display
-        />
-      </div>
+      <ImageUpload 
+        id={props.projectId} 
+        type="project"
+        handleImageUrl={handleImageUrl} 
+        originalImageUrl={thumbImage} 
+      />
+      <ImageMultipleUpload
+        id={props.projectId}
+        type="project"
+        handleImageUrls={handleImageUrls}
+        originalImageUrls={images} // Pass the current array of image URLs for display
+      />
       <RichTextEditor value={description} onChange={setDescription} 
         onImageUpload={imageApi.getMenuImageRef} />
       <div className={styles.buttons}>
