@@ -120,7 +120,10 @@ const ProjectEditor = (props) => {
     if (props.projectId) {
       const doc = await props.getProject(props.projectId);
       if (doc) {
-        setOriginal(doc);
+        setOriginal({
+          ...doc,
+          date: dayjs(doc.date) // Convert the date to a Day.js object
+        });
         // set the state with the data from the server
         setTitle(doc.title);
         setDate(dayjs(doc.date));
