@@ -10,6 +10,7 @@ import EditPostPage from '../page/editPost/EditPostPage';
 import CategoryPostPage from '../page/blog/CategoryPostPage';
 import PostPage from '../page/blog/PostPage';
 import EditProjectPage from '../page/editProject/EditProjectPage';
+import VoiceChatPage from '../page/voicechat/VoiceChatPage';
 
 const AllRoutes = () => {
   return (
@@ -18,8 +19,8 @@ const AllRoutes = () => {
       <Routes>
         <Route path="/" element={<HomeLightAnimation />} />
         <Route path='/signin' element={<SignInPage />} />
-        <Route exact path='/admin' element={<PrivateRoute/>}>
-          <Route exact path='/admin' element={<AdminPage/>}/>
+        <Route exact path='/admin' element={<PrivateRoute />}>
+          <Route exact path='/admin' element={<AdminPage />} />
         </Route>
         <Route path='/blog/:category' element={<CategoryPostPage />} />
         <Route path='/blog/:category/:id' element={<PostPage />} />
@@ -35,6 +36,7 @@ const AllRoutes = () => {
         <Route path='/new-project' element={<PrivateRoute />}>
           <Route path='/new-project' element={<EditProjectPage />} />
         </Route>
+        <Route path='/voice-chat' element={<VoiceChatPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
