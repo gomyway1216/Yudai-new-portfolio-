@@ -11,6 +11,7 @@ import CategoryPostPage from '../page/blog/CategoryPostPage';
 import PostPage from '../page/blog/PostPage';
 import EditProjectPage from '../page/editProject/EditProjectPage';
 import VoiceChatPage from '../page/voicechat/VoiceChatPage';
+import VoiceTaskPage from '../page/voiceTask/VoiceTaskPage';
 
 const AllRoutes = () => {
   return (
@@ -37,6 +38,7 @@ const AllRoutes = () => {
           <Route path='/new-project' element={<EditProjectPage />} />
         </Route>
         <Route path='/voice-chat' element={<VoiceChatPage />} />
+        <Route path='/voice-task' element={<VoiceTaskPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
