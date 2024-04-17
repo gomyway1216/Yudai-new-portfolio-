@@ -1,7 +1,9 @@
 import * as fbConnect from './firebaseConnect';
 import {
   collection,
-  getDocs
+  doc,
+  getDocs,
+  updateDoc
 } from 'firebase/firestore';
 
 const getDbAccess = () => {
@@ -24,4 +26,17 @@ export const getTasks = async (userId) => {
   });
 
   return tasks;
+};
+
+export const updateTaskCompletion = async (userId, taskId) => {
+  // Ensure a user ID and task ID are provided
+  if (!userId || !taskId) {
+    throw new Error('No user ID or task ID provided');
+  }
+
+  // Access the nested 'task' collection inside the user's document
+  const taskDocPath = `user/${userId}/task/${taskId}`;
+  await updateDoc(doc(getDbAccess(), taskDocPath), {
+    completed: true
+  });
 };

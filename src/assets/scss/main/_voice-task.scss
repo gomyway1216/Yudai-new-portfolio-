@@ -1,0 +1,24 @@
+.voice-chat {
+  margin: 20px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  button {
+    margin-bottom: 20px;
+  }
+
+  .task-lists {
+    display: flex;
+    gap: 20px;
+
+    .task-list {
+      flex: 1;
+
+      h3 {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
