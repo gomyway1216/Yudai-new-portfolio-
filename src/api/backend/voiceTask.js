@@ -44,7 +44,7 @@ export const markTaskAsIncomplete = async (userId, taskId) => {
 
 // Function to delete a task
 export const deleteTask = async (userId, taskId) => {
-  await apiCall(process.env.REACT_APP_TASK_DELETE_TASK_URL_LOCAL, { user_id: userId, task_id: taskId });
+  await apiCall(process.env.REACT_APP_TASK_DELETE_TASK_URL, { user_id: userId, task_id: taskId });
 };
 
 // Function to get all tasks
