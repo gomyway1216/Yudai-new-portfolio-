@@ -13,6 +13,8 @@ import {
   DialogActions,
   TextField,
   Snackbar,
+  CircularProgress,
+  Backdrop
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import Recorder from './Recorder';
@@ -29,6 +31,7 @@ const VoiceTask = () => {
   const [newTaskDescription, setNewTaskDescription] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -81,6 +84,7 @@ const VoiceTask = () => {
   };
 
   const handleRecordingComplete = async (file) => {
+    setIsLoading(true);
     const formData = new FormData();
     formData.append('audio', file, 'input.mp3');
     try {
@@ -92,6 +96,8 @@ const VoiceTask = () => {
       await fetchIncompleteTasks(); // Fetch tasks after receiving the response
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -146,8 +152,7 @@ const VoiceTask = () => {
   return (
     <div className="voice-chat">
       <h2>Voice Task</h2>
-      <Recorder onRecordingComplete={handleRecordingComplete} />
-      {botResponse && <p>{botResponse}</p>}
+
       <div className="task-lists">
         <div className="task-list">
           <h3>Pending Tasks</h3>
@@ -208,14 +213,20 @@ const VoiceTask = () => {
           </List>
         </div>
       </div>
-      <Fab
-        color="primary"
-        aria-label="add"
-        style={{ position: 'fixed', bottom: '20px', right: '20px' }}
-        onClick={() => setOpenDialog(true)}
-      >
-        <AddIcon />
-      </Fab>
+
+      <div className="fab-container">
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => setOpenDialog(true)}
+        >
+          <AddIcon />
+        </Fab>
+        <Recorder onRecordingComplete={handleRecordingComplete} />
+      </div>
+      <Backdrop open={isLoading} className="loading-overlay">
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
         <DialogTitle>Create Task</DialogTitle>
         <DialogContent>
@@ -244,6 +255,7 @@ const VoiceTask = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
