@@ -28,8 +28,9 @@ export const getIncompleteTasks = async (userId) => {
 
 // Function to create a task
 export const createTask = async (userId, taskData) => {
-  await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL_LOCAL,
+  const taskId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL,
     { user_id: userId, task_data: JSON.stringify(taskData) });
+  return taskId;
 };
 
 // Function to mark a task as completed

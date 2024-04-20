@@ -1,18 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import * as voiceTaskApi from '../../api/backend/voiceTask';
-import { List, ListItem, ListItemText, ListItemSecondaryAction, Button } from '@mui/material';
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Button,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Snackbar,
+} from '@mui/material';
+import { Add as AddIcon } from '@mui/icons-material';
 import Recorder from './Recorder';
 
 const TEST_USER_ID = 'aoUPpC4gz7QlvbMcpNH5';
 
-const VoiceChat = () => {
+const VoiceTask = () => {
   const [botResponse, setBotResponse] = useState('');
   const [completedTasks, setCompletedTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [newTaskName, setNewTaskName] = useState('');
+  const [newTaskDescription, setNewTaskDescription] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   useEffect(() => {
     fetchTasks();
   }, []);
+
+  const handleCreateTask = async () => {
+    const taskData = {
+      name: newTaskName,
+      description: newTaskDescription,
+      created_at: new Date().toISOString(),
+    };
+
+    try {
+      const response = await voiceTaskApi.createTask(TEST_USER_ID, taskData);
+      const { task_id } = response;
+
+      setIncompleteTasks((prevTasks) => [
+        ...prevTasks,
+        { id: task_id, ...taskData, completed: false },
+      ]);
+
+      setOpenDialog(false);
+      setNewTaskName('');
+      setNewTaskDescription('');
+    } catch (error) {
+      console.error('Error creating task:', error);
+      setSnackbarMessage('Failed to create task');
+      setSnackbarOpen(true);
+    }
+  };
 
   const fetchIncompleteTasks = async () => {
     try {
@@ -108,7 +154,10 @@ const VoiceChat = () => {
           <List>
             {incompleteTasks.map((task) => (
               <ListItem key={task.id}>
-                <ListItemText primary={task.name} />
+                <ListItemText
+                  primary={task.name}
+                  secondary={new Date(task.created_at).toLocaleString()}
+                />
                 <ListItemSecondaryAction>
                   <Button
                     variant="contained"
@@ -134,7 +183,10 @@ const VoiceChat = () => {
           <List>
             {completedTasks.map((task) => (
               <ListItem key={task.id}>
-                <ListItemText primary={task.name} />
+                <ListItemText
+                  primary={task.name}
+                  secondary={new Date(task.created_at).toLocaleString()}
+                />
                 <ListItemSecondaryAction>
                   <Button
                     variant="contained"
@@ -156,8 +208,50 @@ const VoiceChat = () => {
           </List>
         </div>
       </div>
+      <Fab
+        color="primary"
+        aria-label="add"
+        style={{ position: 'fixed', bottom: '20px', right: '20px' }}
+        onClick={() => setOpenDialog(true)}
+      >
+        <AddIcon />
+      </Fab>
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Create Task</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Task Name"
+            fullWidth
+            value={newTaskName}
+            onChange={(e) => setNewTaskName(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            label="Description"
+            fullWidth
+            multiline
+            rows={4}
+            value={newTaskDescription}
+            onChange={(e) => setNewTaskDescription(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button onClick={handleCreateTask} color="primary">
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </div>
   );
 };
 
-export default VoiceChat;
+export default VoiceTask;
