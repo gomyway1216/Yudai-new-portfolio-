@@ -6,6 +6,7 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Button,
+  IconButton,
   Fab,
   Dialog,
   DialogTitle,
@@ -16,7 +17,10 @@ import {
   CircularProgress,
   Backdrop
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import {
+  Add as AddIcon, CheckCircle as CheckCircleIcon,
+  Undo as UndoIcon, Delete as DeleteIcon
+} from '@mui/icons-material';
 import Recorder from './Recorder';
 
 const TEST_USER_ID = 'aoUPpC4gz7QlvbMcpNH5';
@@ -164,20 +168,26 @@ const VoiceTask = () => {
                   secondary={new Date(task.created_at).toLocaleString()}
                 />
                 <ListItemSecondaryAction>
-                  <Button
-                    variant="contained"
+                  <IconButton
+                    edge="end"
                     color="primary"
+                    size="large"
                     onClick={() => toggleTaskCompletion(task.id, task.completed)}
                   >
-                    Done
-                  </Button>
-                  <Button
-                    variant="contained"
+                    <CheckCircleIcon
+                      fontSize="inherit"
+                    />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
                     color="secondary"
+                    size="large"
                     onClick={() => handleDeleteTask(task.id)}
                   >
-                    Delete
-                  </Button>
+                    <DeleteIcon
+                      fontSize="inherit"
+                    />
+                  </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
@@ -193,20 +203,24 @@ const VoiceTask = () => {
                   secondary={new Date(task.created_at).toLocaleString()}
                 />
                 <ListItemSecondaryAction>
-                  <Button
-                    variant="contained"
+                  <IconButton
+                    edge="end"
                     color="primary"
+                    size="large"
                     onClick={() => toggleTaskCompletion(task.id, task.completed)}
                   >
-                    Undo
-                  </Button>
-                  <Button
-                    variant="contained"
+                    <UndoIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
                     color="secondary"
+                    size="large"
                     onClick={() => handleDeleteTask(task.id)}
                   >
-                    Delete
-                  </Button>
+                    <DeleteIcon
+                      fontSize="inherit"
+                    />
+                  </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
             ))}
