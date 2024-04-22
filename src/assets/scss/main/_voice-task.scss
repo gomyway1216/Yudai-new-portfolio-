@@ -1,8 +1,15 @@
 .voice-chat {
   margin: 20px;
 
-  h2 {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 10px;
+
+    h2 {
+      margin-bottom: 0;
+    }
   }
 
   .task-lists {

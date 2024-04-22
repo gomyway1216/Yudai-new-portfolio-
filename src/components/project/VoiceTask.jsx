@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as voiceTaskApi from '../../api/backend/voiceTask';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   List,
   ListItem,
@@ -15,11 +16,18 @@ import {
   TextField,
   Snackbar,
   CircularProgress,
-  Backdrop
+  Backdrop,
+  Tabs,
+  Tab,
+  Avatar,
+  AppBar,
+  Toolbar,
 } from '@mui/material';
 import {
   Add as AddIcon, CheckCircle as CheckCircleIcon,
-  Undo as UndoIcon, Delete as DeleteIcon
+  Undo as UndoIcon, Delete as DeleteIcon,
+  Star as StarIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import Recorder from './Recorder';
 
@@ -29,6 +37,7 @@ const VoiceTask = () => {
   const [botResponse, setBotResponse] = useState('');
   const [completedTasks, setCompletedTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
+  const [tasksByList, setTasksByList] = useState([]);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
@@ -37,9 +46,77 @@ const VoiceTask = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const [selectedList, setSelectedList] = useState('default');
+  const [lists, setLists] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
-    fetchTasks();
+    const state = location.state;
+    console.log('state:', state);
+    if (state && state.selectedListId) {
+      console.log('setting selected list:', state.selectedListId);
+      lists.push({ id: state.selectedListId, name: state.selectedListName });
+      setLists(lists);
+      setSelectedList(state.selectedListId);
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+    fetchLists();
+  }, [location]);
+
+  console.log('lists:', lists);
+  console.log('selectedList:', selectedList);
+
+
+  useEffect(() => {
+    fetchLists();
   }, []);
+
+  const fetchLists = async () => {
+    try {
+      const listsData = await voiceTaskApi.getAllTaskLists(TEST_USER_ID);
+      console.log('lists:', listsData);
+      setLists(listsData);
+    } catch (error) {
+      console.error('Error fetching lists:', error);
+    }
+  };
+
+  useEffect(() => {
+    // fetchTasks();
+    fetchTasksByList(selectedList);
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const incompleteTasksData = await voiceTaskApi.getIncompleteTasks(TEST_USER_ID);
+      const completedTasksData = await voiceTaskApi.getCompletedTasks(TEST_USER_ID);
+      setCompletedTasks(completedTasksData);
+      setIncompleteTasks(incompleteTasksData);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
+  };
+
+  const fetchTasksByList = async (listId) => {
+    try {
+      const tasksByListData = await voiceTaskApi.getTasksByList(TEST_USER_ID, listId);
+      setTasksByList(tasksByListData);
+    } catch (error) {
+      console.error('Error fetching tasks by list:', error);
+    }
+  };
+
+
+
+  const handleListChange = (event, newList) => {
+    console.log('newList:', newList);
+    setSelectedList(newList);
+  };
+
+  const handleCreateList = () => {
+    navigate('/voice-task/create-list');
+  };
 
   const handleCreateTask = async () => {
     const taskData = {
@@ -54,7 +131,7 @@ const VoiceTask = () => {
 
       setIncompleteTasks((prevTasks) => [
         ...prevTasks,
-        { id: task_id, ...taskData, completed: false },
+        { id: task_id, ...taskData, listId: selectedListId, completed: false },
       ]);
 
       setOpenDialog(false);
@@ -73,17 +150,6 @@ const VoiceTask = () => {
       setIncompleteTasks(incompleteTasksData);
     } catch (error) {
       console.error('Error fetching incomplete tasks:', error);
-    }
-  };
-
-  const fetchTasks = async () => {
-    try {
-      const incompleteTasksData = await voiceTaskApi.getIncompleteTasks(TEST_USER_ID);
-      const completedTasksData = await voiceTaskApi.getCompletedTasks(TEST_USER_ID);
-      setCompletedTasks(completedTasksData);
-      setIncompleteTasks(incompleteTasksData);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
     }
   };
 
@@ -155,7 +221,27 @@ const VoiceTask = () => {
 
   return (
     <div className="voice-chat">
-      <h2>Voice Task</h2>
+      <AppBar position="static">
+        <Toolbar>
+          <h2>Tasks</h2>
+          <Avatar>
+            <PersonIcon />
+          </Avatar>
+        </Toolbar>
+      </AppBar>
+      <Tabs
+        value={selectedList}
+        onChange={handleListChange}
+        variant="scrollable"
+        scrollButtons="auto"
+      >
+        <Tab value="Favorites" icon={<StarIcon />} />
+        <Tab label="My Tasks" value="default" />
+        {lists.map((list) => (
+          <Tab key={list.id} label={list.name} value={list.id} />
+        ))}
+        <Tab label="+ New list" value="new_list" onClick={handleCreateList} />
+      </Tabs>
 
       <div className="task-lists">
         <div className="task-list">

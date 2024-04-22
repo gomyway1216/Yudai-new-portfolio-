@@ -92,3 +92,26 @@ export const getAllTaskCategories = async (userId) => {
   const categories = await apiCall(process.env.REACT_APP_TASK_GET_ALL_TASK_CATEGORIES_URL_LOCAL, { user_id: userId });
   return categories;
 };
+
+// Function to create a task list
+export const createTaskList = async (userId, listName) => {
+  const listId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_LIST_URL_LOCAL,
+    { user_id: userId, list_name: listName });
+  return listId;
+};
+
+// Function to get all task lists
+export const getAllTaskLists = async (userId) => {
+  console.log('userId', userId);
+  const lists = await apiCall(process.env.REACT_APP_TASK_GET_ALL_TASK_LISTS_URL_LOCAL,
+    { user_id: userId });
+  console.log('received lists:', lists);
+  return lists;
+};
+
+// Function to get tasks in a list
+export const getTasksByList = async (userId, listId) => {
+  const tasks = await apiCall(process.env.REACT_APP_TASK_GET_TASKS_BY_LIST_URL_LOCAL,
+    { user_id: userId, list_id: listId });
+  return tasks;
+};
