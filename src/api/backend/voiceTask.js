@@ -34,6 +34,7 @@ export const getIncompleteTasks = async (userId, listId) => {
 
 // Function to create a task
 export const createTask = async (userId, taskData) => {
+  console.log('createTask', userId, taskData);
   const taskId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL_LOCAL,
     { user_id: userId, task_data: JSON.stringify(taskData) });
   return taskId;
@@ -50,8 +51,9 @@ export const markTaskAsIncomplete = async (userId, taskId) => {
 };
 
 // Function to delete a task
-export const deleteTask = async (userId, taskId) => {
-  await apiCall(process.env.REACT_APP_TASK_DELETE_TASK_URL, { user_id: userId, task_id: taskId });
+export const deleteTask = async (userId, listId, taskId) => {
+  await apiCall(
+    process.env.REACT_APP_TASK_DELETE_TASK_URL_LOCAL, { user_id: userId, list_id: listId, task_id: taskId });
 };
 
 // Function to get all tasks

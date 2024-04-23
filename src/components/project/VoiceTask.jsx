@@ -98,6 +98,7 @@ const VoiceTask = () => {
   const fetchTasks = async (selectedId) => {
     try {
       console.log('fetching completed and incomplete tasks. selectedId: ', selectedId);
+      setIsLoading(true);
       const incompleteTasksData =
         await voiceTaskApi.getIncompleteTasks(TEST_USER_ID, selectedId ? selectedId : selectedListId);
       // const completedTasksData = await voiceTaskApi.getCompletedTasks(TEST_USER_ID, selectedListId);
@@ -105,6 +106,8 @@ const VoiceTask = () => {
       setIncompleteTasks(incompleteTasksData);
     } catch (error) {
       console.error('Error fetching tasks:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -133,6 +136,7 @@ const VoiceTask = () => {
   const handleCreateTask = async () => {
     const taskData = {
       name: newTaskName,
+      list_id: selectedListId,
       description: newTaskDescription,
       created_at: new Date().toISOString(),
     };
@@ -224,7 +228,7 @@ const VoiceTask = () => {
     setCompletedTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     setIncompleteTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
     try {
-      await voiceTaskApi.deleteTask(TEST_USER_ID, taskId);
+      await voiceTaskApi.deleteTask(TEST_USER_ID, selectedListId, taskId);
     } catch (error) {
       console.error('Error deleting task:', error);
       await fetchTasks();
