@@ -46,7 +46,7 @@ const VoiceTask = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const [selectedList, setSelectedList] = useState('default');
+  const [selectedListId, setSelectedListId] = useState('default');
   const [lists, setLists] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,14 +58,20 @@ const VoiceTask = () => {
       console.log('setting selected list:', state.selectedListId);
       lists.push({ id: state.selectedListId, name: state.selectedListName });
       setLists(lists);
-      setSelectedList(state.selectedListId);
-      navigate(location.pathname, { replace: true, state: {} });
+      setSelectedListId(state.selectedListId);
+      // navigate(location.pathname, { replace: true, state: {} });
+      window.history.replaceState({}, document.title, location.pathname);
+      // fetchTasks();
+      fetchTasks(state.selectedListId);
+    } else {
+      fetchTasks('default');
     }
-    fetchLists();
+    // fetchLists();
+    // fetchTasks();
   }, [location]);
 
   console.log('lists:', lists);
-  console.log('selectedList:', selectedList);
+  console.log('selectedListId:', selectedListId);
 
 
   useEffect(() => {
@@ -82,16 +88,20 @@ const VoiceTask = () => {
     }
   };
 
-  useEffect(() => {
-    // fetchTasks();
-    fetchTasksByList(selectedList);
-  }, []);
+  // useEffect(() => {
+  //   // fetchTasks();
+  //   // fetchTasksByList(selectedList);
+  //   console.log('useEffect of selectedListId:', selectedListId);
+  //   fetchTasks();
+  // }, [selectedListId]);
 
-  const fetchTasks = async () => {
+  const fetchTasks = async (selectedId) => {
     try {
-      const incompleteTasksData = await voiceTaskApi.getIncompleteTasks(TEST_USER_ID);
-      const completedTasksData = await voiceTaskApi.getCompletedTasks(TEST_USER_ID);
-      setCompletedTasks(completedTasksData);
+      console.log('fetching completed and incomplete tasks. selectedId: ', selectedId);
+      const incompleteTasksData =
+        await voiceTaskApi.getIncompleteTasks(TEST_USER_ID, selectedId ? selectedId : selectedListId);
+      // const completedTasksData = await voiceTaskApi.getCompletedTasks(TEST_USER_ID, selectedListId);
+      // setCompletedTasks(completedTasksData);
       setIncompleteTasks(incompleteTasksData);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -100,6 +110,7 @@ const VoiceTask = () => {
 
   const fetchTasksByList = async (listId) => {
     try {
+      console.log('fetching tasks by list:', listId);
       const tasksByListData = await voiceTaskApi.getTasksByList(TEST_USER_ID, listId);
       setTasksByList(tasksByListData);
     } catch (error) {
@@ -109,9 +120,10 @@ const VoiceTask = () => {
 
 
 
-  const handleListChange = (event, newList) => {
-    console.log('newList:', newList);
-    setSelectedList(newList);
+  const handleListChange = (event, newListId) => {
+    console.log('newList:', newListId);
+    setSelectedListId(newListId);
+    fetchTasks(newListId);
   };
 
   const handleCreateList = () => {
@@ -230,7 +242,7 @@ const VoiceTask = () => {
         </Toolbar>
       </AppBar>
       <Tabs
-        value={selectedList}
+        value={selectedListId}
         onChange={handleListChange}
         variant="scrollable"
         scrollButtons="auto"

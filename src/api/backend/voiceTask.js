@@ -15,20 +15,26 @@ export const getResponse = async (body) => {
 };
 
 // Function to get completed tasks
-export const getCompletedTasks = async (userId) => {
-  const tasks = await apiCall(process.env.REACT_APP_TASK_GET_COMPLETED_TASKS_URL, { user_id: userId });
+export const getCompletedTasks = async (userId, listId) => {
+  console.log('getCompletedTasks', userId, listId);
+  const tasks = await apiCall(
+    process.env.REACT_APP_TASK_GET_COMPLETED_TASKS_URL_LOCAL, { user_id: userId, list_id: listId });
+  console.log('completed tasks:', tasks);
   return tasks;
 };
 
 // Function to get incomplete tasks
-export const getIncompleteTasks = async (userId) => {
-  const tasks = await apiCall(process.env.REACT_APP_TASK_GET_INCOMPLETE_TASKS_URL, { user_id: userId });
+export const getIncompleteTasks = async (userId, listId) => {
+  console.log('getIncompleteTasks', userId, listId);
+  const tasks = await apiCall(
+    process.env.REACT_APP_TASK_GET_INCOMPLETE_TASKS_URL_LOCAL, { user_id: userId, list_id: listId });
+  console.log('incomplete tasks:', tasks);
   return tasks;
 };
 
 // Function to create a task
 export const createTask = async (userId, taskData) => {
-  const taskId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL,
+  const taskId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL_LOCAL,
     { user_id: userId, task_data: JSON.stringify(taskData) });
   return taskId;
 };
