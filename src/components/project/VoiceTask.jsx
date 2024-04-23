@@ -22,12 +22,17 @@ import {
   Avatar,
   AppBar,
   Toolbar,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
 } from '@mui/material';
 import {
   Add as AddIcon, CheckCircle as CheckCircleIcon,
   Undo as UndoIcon, Delete as DeleteIcon,
   Star as StarIcon,
   Person as PersonIcon,
+  ExpandMore as ExpandMoreIcon
 } from '@mui/icons-material';
 import Recorder from './Recorder';
 
@@ -37,7 +42,6 @@ const VoiceTask = () => {
   const [botResponse, setBotResponse] = useState('');
   const [completedTasks, setCompletedTasks] = useState([]);
   const [incompleteTasks, setIncompleteTasks] = useState([]);
-  const [tasksByList, setTasksByList] = useState([]);
 
   const [openDialog, setOpenDialog] = useState(false);
   const [newTaskName, setNewTaskName] = useState('');
@@ -45,6 +49,7 @@ const VoiceTask = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [completedExpanded, setCompletedExpanded] = useState(false);
 
   const [selectedListId, setSelectedListId] = useState('default');
   const [lists, setLists] = useState([]);
@@ -111,21 +116,11 @@ const VoiceTask = () => {
     }
   };
 
-  const fetchTasksByList = async (listId) => {
-    try {
-      console.log('fetching tasks by list:', listId);
-      const tasksByListData = await voiceTaskApi.getTasksByList(TEST_USER_ID, listId);
-      setTasksByList(tasksByListData);
-    } catch (error) {
-      console.error('Error fetching tasks by list:', error);
-    }
-  };
-
-
-
   const handleListChange = (event, newListId) => {
     console.log('newList:', newListId);
     setSelectedListId(newListId);
+    setCompletedTasks([]);
+    setCompletedExpanded(false);
     fetchTasks(newListId);
   };
 
@@ -235,6 +230,18 @@ const VoiceTask = () => {
     }
   };
 
+  const handleCompletedExpand = async (expanded) => {
+    setCompletedExpanded(expanded);
+    if (expanded) {
+      try {
+        const completedTasksData = await voiceTaskApi.getCompletedTasks(TEST_USER_ID, selectedListId);
+        setCompletedTasks(completedTasksData);
+      } catch (error) {
+        console.error('Error fetching completed tasks:', error);
+      }
+    }
+  };
+
   return (
     <div className="voice-chat">
       <AppBar position="static">
@@ -295,8 +302,13 @@ const VoiceTask = () => {
             ))}
           </List>
         </div>
-        <div className="task-list">
-          <h3>Completed Tasks</h3>
+      </div>
+
+      <Accordion expanded={completedExpanded} onChange={(event, expanded) => handleCompletedExpand(expanded)}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="h6">Completed Tasks</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
           <List>
             {completedTasks.map((task) => (
               <ListItem key={task.id}>
@@ -327,8 +339,8 @@ const VoiceTask = () => {
               </ListItem>
             ))}
           </List>
-        </div>
-      </div>
+        </AccordionDetails>
+      </Accordion>
 
       <div className="fab-container">
         <Fab

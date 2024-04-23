@@ -7,6 +7,8 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  CircularProgress,
+  Backdrop,
 } from '@mui/material';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 
@@ -14,10 +16,12 @@ const TEST_USER_ID = 'aoUPpC4gz7QlvbMcpNH5';
 
 const CreateTaskList = () => {
   const [listName, setListName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleCreateList = async () => {
     try {
+      setIsLoading(true);
       const response = await voiceTaskApi.createTaskList(TEST_USER_ID, listName);
       const { task_id } = response;
       console.log('Created list with ID:', task_id);
@@ -26,6 +30,8 @@ const CreateTaskList = () => {
       navigate('/voice-task', { state: { selectedListId: task_id, selectedListName: listName } });
     } catch (error) {
       console.error('Error creating list:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,6 +56,9 @@ const CreateTaskList = () => {
         value={listName}
         onChange={(e) => setListName(e.target.value)}
       />
+      <Backdrop open={isLoading} className="loading-overlay">
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };
