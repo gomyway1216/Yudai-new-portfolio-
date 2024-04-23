@@ -157,7 +157,7 @@ const VoiceTask = () => {
 
   const fetchIncompleteTasks = async () => {
     try {
-      const incompleteTasksData = await voiceTaskApi.getIncompleteTasks(TEST_USER_ID);
+      const incompleteTasksData = await voiceTaskApi.getIncompleteTasks(TEST_USER_ID, selectedListId);
       setIncompleteTasks(incompleteTasksData);
     } catch (error) {
       console.error('Error fetching incomplete tasks:', error);
@@ -168,6 +168,8 @@ const VoiceTask = () => {
     setIsLoading(true);
     const formData = new FormData();
     formData.append('audio', file, 'input.mp3');
+    formData.append('user_id', TEST_USER_ID);
+    formData.append('list_id', selectedListId);
     try {
       const response = await voiceTaskApi.getResponse(formData);
       console.log('chat response:', response);

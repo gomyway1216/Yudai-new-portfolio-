@@ -2,7 +2,7 @@ import { apiCall } from './backendConnector';
 
 export const getResponse = async (body) => {
   try {
-    const response = await fetch(process.env.REACT_APP_TASK_URL, {
+    const response = await fetch(process.env.REACT_APP_TASK_URL_LOCAL, {
       method: 'POST',
       body: body,
       headers: {
