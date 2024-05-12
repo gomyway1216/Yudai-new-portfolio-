@@ -18,7 +18,7 @@ export const getResponse = async (body) => {
 export const getCompletedTasks = async (userId, listId) => {
   console.log('getCompletedTasks', userId, listId);
   const tasks = await apiCall(
-    process.env.REACT_APP_TASK_GET_COMPLETED_TASKS_URL_LOCAL, { user_id: userId, list_id: listId });
+    process.env.REACT_APP_TASK_GET_COMPLETED_TASKS_URL, { user_id: userId, list_id: listId });
   console.log('completed tasks:', tasks);
   return tasks;
 };
@@ -27,7 +27,7 @@ export const getCompletedTasks = async (userId, listId) => {
 export const getIncompleteTasks = async (userId, listId) => {
   console.log('getIncompleteTasks', userId, listId);
   const tasks = await apiCall(
-    process.env.REACT_APP_TASK_GET_INCOMPLETE_TASKS_URL_LOCAL, { user_id: userId, list_id: listId });
+    process.env.REACT_APP_TASK_GET_INCOMPLETE_TASKS_URL, { user_id: userId, list_id: listId });
   console.log('incomplete tasks:', tasks);
   return tasks;
 };
@@ -35,7 +35,7 @@ export const getIncompleteTasks = async (userId, listId) => {
 // Function to create a task
 export const createTask = async (userId, taskData) => {
   console.log('createTask', userId, taskData);
-  const taskId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL_LOCAL,
+  const taskId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_URL,
     { user_id: userId, task_data: JSON.stringify(taskData) });
   return taskId;
 };
@@ -53,7 +53,7 @@ export const markTaskAsIncomplete = async (userId, taskId) => {
 // Function to delete a task
 export const deleteTask = async (userId, listId, taskId) => {
   await apiCall(
-    process.env.REACT_APP_TASK_DELETE_TASK_URL_LOCAL, { user_id: userId, list_id: listId, task_id: taskId });
+    process.env.REACT_APP_TASK_DELETE_TASK_URL, { user_id: userId, list_id: listId, task_id: taskId });
 };
 
 // Function to get all tasks
@@ -103,7 +103,7 @@ export const getAllTaskCategories = async (userId) => {
 
 // Function to create a task list
 export const createTaskList = async (userId, listName) => {
-  const listId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_LIST_URL_LOCAL,
+  const listId = await apiCall(process.env.REACT_APP_TASK_CREATE_TASK_LIST_URL,
     { user_id: userId, list_name: listName });
   return listId;
 };
@@ -111,7 +111,7 @@ export const createTaskList = async (userId, listName) => {
 // Function to get all task lists
 export const getAllTaskLists = async (userId) => {
   console.log('userId', userId);
-  const lists = await apiCall(process.env.REACT_APP_TASK_GET_ALL_TASK_LISTS_URL_LOCAL,
+  const lists = await apiCall(process.env.REACT_APP_TASK_GET_ALL_TASK_LISTS_URL,
     { user_id: userId });
   console.log('received lists:', lists);
   return lists;
@@ -119,7 +119,26 @@ export const getAllTaskLists = async (userId) => {
 
 // Function to get tasks in a list
 export const getTasksByList = async (userId, listId) => {
-  const tasks = await apiCall(process.env.REACT_APP_TASK_GET_TASKS_BY_LIST_URL_LOCAL,
+  const tasks = await apiCall(process.env.REACT_APP_TASK_GET_TASKS_BY_LIST_URL,
     { user_id: userId, list_id: listId });
+  return tasks;
+};
+
+// Function to star a task
+export const starTask = async (userId, listId, taskId) => {
+  console.log('starTask', userId, listId, taskId);
+  await apiCall(process.env.REACT_APP_TASK_STAR_TASK_URL, { user_id: userId, list_id: listId, task_id: taskId });
+};
+
+// Function to unstar a task
+export const unstarTask = async (userId, listId, taskId) => {
+  console.log('unstarTask', userId, listId, taskId);
+  await apiCall(
+    process.env.REACT_APP_TASK_UNSTAR_TASK_URL, { user_id: userId, list_id: listId, task_id: taskId });
+};
+
+// Function to get starred tasks
+export const getStarredTasks = async (userId) => {
+  const tasks = await apiCall(process.env.REACT_APP_TASK_GET_STARRED_TASKS_URL, { user_id: userId });
   return tasks;
 };

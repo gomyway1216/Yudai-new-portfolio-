@@ -26,6 +26,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
+  ListItemIcon
 } from '@mui/material';
 import {
   Add as AddIcon, CheckCircle as CheckCircleIcon,
@@ -58,9 +59,7 @@ const VoiceTask = () => {
 
   useEffect(() => {
     const state = location.state;
-    console.log('state:', state);
     if (state && state.selectedListId) {
-      console.log('setting selected list:', state.selectedListId);
       lists.push({ id: state.selectedListId, name: state.selectedListName });
       setLists(lists);
       setSelectedListId(state.selectedListId);
@@ -75,10 +74,6 @@ const VoiceTask = () => {
     // fetchTasks();
   }, [location]);
 
-  console.log('lists:', lists);
-  console.log('selectedListId:', selectedListId);
-
-
   useEffect(() => {
     fetchLists();
   }, []);
@@ -86,23 +81,14 @@ const VoiceTask = () => {
   const fetchLists = async () => {
     try {
       const listsData = await voiceTaskApi.getAllTaskLists(TEST_USER_ID);
-      console.log('lists:', listsData);
       setLists(listsData);
     } catch (error) {
       console.error('Error fetching lists:', error);
     }
   };
 
-  // useEffect(() => {
-  //   // fetchTasks();
-  //   // fetchTasksByList(selectedList);
-  //   console.log('useEffect of selectedListId:', selectedListId);
-  //   fetchTasks();
-  // }, [selectedListId]);
-
   const fetchTasks = async (selectedId) => {
     try {
-      console.log('fetching completed and incomplete tasks. selectedId: ', selectedId);
       setIsLoading(true);
       const incompleteTasksData =
         await voiceTaskApi.getIncompleteTasks(TEST_USER_ID, selectedId ? selectedId : selectedListId);
@@ -116,12 +102,27 @@ const VoiceTask = () => {
     }
   };
 
+  const fetchStarredTasks = async () => {
+    try {
+      setIsLoading(true);
+      const starredTasksData = await voiceTaskApi.getStarredTasks(TEST_USER_ID);
+      setIncompleteTasks(starredTasksData);
+    } catch (error) {
+      console.error('Error fetching starred tasks:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleListChange = (event, newListId) => {
-    console.log('newList:', newListId);
     setSelectedListId(newListId);
     setCompletedTasks([]);
     setCompletedExpanded(false);
-    fetchTasks(newListId);
+    if (newListId === 'Favorites') {
+      fetchStarredTasks();
+    } else {
+      fetchTasks(newListId);
+    }
   };
 
   const handleCreateList = () => {
@@ -172,9 +173,7 @@ const VoiceTask = () => {
     formData.append('list_id', selectedListId);
     try {
       const response = await voiceTaskApi.getResponse(formData);
-      console.log('chat response:', response);
       const responseText = await response.text();
-      console.log('responseText:', responseText);
       setBotResponse(responseText);
       await fetchIncompleteTasks(); // Fetch tasks after receiving the response
     } catch (error) {
@@ -211,12 +210,64 @@ const VoiceTask = () => {
         return prevTasks;
       });
       try {
-        console.log('marking task as completed:', taskId);
         await voiceTaskApi.markTaskAsCompleted(TEST_USER_ID, taskId);
       } catch (error) {
         console.error('Error marking task as completed:', error);
         setCompletedTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
         setIncompleteTasks((prevTasks) => [...prevTasks, incompleteTasks.find((task) => task.id === taskId)]);
+      }
+    }
+  };
+
+  const toggleTaskStar = async (taskId, starred) => {
+    let removedTask;
+    try {
+      // change the star color of the task in imcompleted task before the api call and undo when receiving an erro
+      // update incomplete tasks
+      setIncompleteTasks((prevTasks) => prevTasks.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, starred: !starred };
+        }
+        return task;
+      }));
+
+      let taskListId = selectedListId;
+      if (selectedListId === 'Favorites') {
+        removedTask = incompleteTasks.find((task) => task.id === taskId);
+        taskListId = removedTask.list_id;
+      } else {
+        setIncompleteTasks((prevTasks) => prevTasks.map((task) => {
+          if (task.id === taskId) {
+            return { ...task, starred: !starred };
+          }
+          return task;
+        }));
+      }
+
+      if (starred) {
+        // remove the unstarred task from the starred task view
+        if (selectedListId === 'Favorites') {
+          setIncompleteTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+        }
+        await voiceTaskApi.unstarTask(TEST_USER_ID, taskListId, taskId);
+      } else {
+        await voiceTaskApi.starTask(TEST_USER_ID, taskListId, taskId);
+      }
+    } catch (error) {
+      console.error('Error updating task star:', error);
+      setSnackbarMessage('Failed to update task star');
+      setSnackbarOpen(true);
+      // undo the star color change
+      if (selectedListId === 'Favorites') {
+        // add back removedTask
+        setIncompleteTasks((prevTasks) => [...prevTasks, removedTask]);
+      } else {
+        setIncompleteTasks((prevTasks) => prevTasks.map((task) => {
+          if (task.id === taskId) {
+            return { ...task, starred: !starred };
+          }
+          return task;
+        }));
       }
     }
   };
@@ -274,32 +325,29 @@ const VoiceTask = () => {
           <List>
             {incompleteTasks.map((task) => (
               <ListItem key={task.id}>
-                <ListItemText
-                  primary={task.name}
-                  secondary={new Date(task.created_at).toLocaleString()}
-                />
-                <ListItemSecondaryAction>
+                <ListItemIcon>
                   <IconButton
-                    edge="end"
+                    edge="start"
                     color="primary"
                     size="large"
                     onClick={() => toggleTaskCompletion(task.id, task.completed)}
                   >
-                    <CheckCircleIcon
-                      fontSize="inherit"
-                    />
+                    <CheckCircleIcon fontSize="inherit" />
                   </IconButton>
-                  <IconButton
-                    edge="end"
-                    color="secondary"
-                    size="large"
-                    onClick={() => handleDeleteTask(task.id)}
-                  >
-                    <DeleteIcon
-                      fontSize="inherit"
-                    />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                </ListItemIcon>
+                <ListItemText
+                  primary={task.name}
+                  secondary={new Date(task.created_at).toLocaleString()}
+                />
+                <IconButton
+                  edge="end"
+                  color={task.starred ? 'secondary' : 'default'}
+                  size="large"
+                  onClick={() => toggleTaskStar(
+                    task.id, task.starred)}
+                >
+                  <StarIcon fontSize="inherit" />
+                </IconButton>
               </ListItem>
             ))}
           </List>
