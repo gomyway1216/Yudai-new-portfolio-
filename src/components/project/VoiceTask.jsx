@@ -324,7 +324,7 @@ const VoiceTask = () => {
           <h3>Pending Tasks</h3>
           <List>
             {incompleteTasks.map((task) => (
-              <ListItem key={task.id}>
+              <ListItem key={task.id} onClick={() => navigate(`/voice-task/${task.id}`)}>
                 <ListItemIcon>
                   <IconButton
                     edge="start"

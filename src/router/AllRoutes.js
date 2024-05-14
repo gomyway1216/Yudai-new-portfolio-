@@ -13,6 +13,7 @@ import EditProjectPage from '../page/editProject/EditProjectPage';
 import VoiceChatPage from '../page/voicechat/VoiceChatPage';
 import VoiceTaskPage from '../page/voiceTask/VoiceTaskPage';
 import VoiceTaskCreateTaskListPage from '../page/voiceTask/CreateTaskListPage';
+import VoiceTaskItemPage from '../page/voiceTask/VoiceTaskItemPage';
 
 const AllRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const AllRoutes = () => {
         </Route>
         <Route path='/voice-chat' element={<VoiceChatPage />} />
         <Route path='/voice-task' element={<VoiceTaskPage />} />
+        <Route path='/voice-task/:id' element={<VoiceTaskItemPage />} />
         <Route path='/voice-task/create-list' element={<VoiceTaskCreateTaskListPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
