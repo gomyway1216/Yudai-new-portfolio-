@@ -142,3 +142,11 @@ export const getStarredTasks = async (userId) => {
   const tasks = await apiCall(process.env.REACT_APP_TASK_GET_STARRED_TASKS_URL, { user_id: userId });
   return tasks;
 };
+
+export const createSubTask = async (userId, taskId, subTaskData) => {
+  console.log('createSubTask', userId, taskId, subTaskData);
+  // const subTaskId = await apiCall(process.env.REACT_APP_TASK_CREATE_SUB_TASK_URL,
+  //   { user_id: userId, task_id: taskId, sub_task_data: JSON.stringify(subTaskData) });
+  // return subTaskId;
+  return '';
+};

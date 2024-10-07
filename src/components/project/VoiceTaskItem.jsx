@@ -20,10 +20,15 @@ import {
   ScheduleOutlined,
   SubdirectoryArrowRight,
   Notes,
+  RadioButtonUnchecked
 } from '@mui/icons-material';
 // import DateSelector from '../date/DateSelector';
 import { LocalizationProvider, MobileDatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import * as voiceTaskApi from '../../api/backend/voiceTask';
+import { useParams, useNavigate } from 'react-router-dom';
+
+const TEST_USER_ID = 'aoUPpC4gz7QlvbMcpNH5';
 
 const VoiceTaskItem = () => {
   const [taskName, setTaskName] = useState('hello');
@@ -31,6 +36,7 @@ const VoiceTaskItem = () => {
   const [detailsText, setDetailsText] = useState('');
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const { taskId } = useParams();
 
   const handleSubtaskToggle = (index) => {
     const updatedSubtasks = [...subtasks];
@@ -44,6 +50,18 @@ const VoiceTaskItem = () => {
 
   const handleDetailsTextChange = (event) => {
     setDetailsText(event.target.value);
+  };
+
+  const handleCreateSubTask = async () => {
+    try {
+      // create and set subtask for a task, then call api. If error, show error message and remove subtask
+      const newSubtask = { name: 'subtask', completed: false };
+      setSubtasks([...subtasks, newSubtask]);
+      await voiceTaskApi.createSubTask(TEST_USER_ID, taskId, newSubtask);
+    } catch (error) {
+      console.error('Error:', error);
+      setSubtasks(subtasks.filter((subtask, index) => index !== subtasks.length - 1));
+    }
   };
 
   return (
@@ -105,7 +123,7 @@ const VoiceTaskItem = () => {
             />
           </LocalizationProvider>
         </ListItem>
-        {subtasks.length > 0 && (
+        {/* {subtasks.length > 0 && (
           <ListItem>
             <List>
               {subtasks.map((subtask, index) => (
@@ -119,12 +137,35 @@ const VoiceTaskItem = () => {
               ))}
             </List>
           </ListItem>
-        )}
+        )} */}
         <ListItem>
           <IconButton>
             <SubdirectoryArrowRight />
           </IconButton>
-          <ListItemText primary="Add subtasks" />
+          <List>
+            {subtasks.map((subtask, index) => (
+              <ListItem key={'subTask' + index} style={{ paddingLeft: 0 }}>
+                <IconButton style={{ alignSelf: 'flex-start', marginLeft: 0, paddingLeft: 0 }}>
+                  <RadioButtonUnchecked />
+                </IconButton>
+                <TextField
+                  id="standard-multiline-flexible"
+                  placeholder="Add details"
+                  multiline
+                  variant="standard"
+                  size="small"
+                  margin="dense"
+                  value={detailsText}
+                  onChange={handleDetailsTextChange}
+                  autoFocus // this is needed for the textfield to be focused when rendered by the conditional rendering
+                  InputProps={{
+                    disableUnderline: true // Disables the underline directly
+                  }}
+                />
+              </ListItem>
+            ))}
+            <ListItemText primary="Add subtasks" onClick={handleCreateSubTask} />
+          </List>
         </ListItem>
       </List>
       <Typography variant="body2" align="center">
